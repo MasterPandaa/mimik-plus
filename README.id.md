@@ -69,11 +69,15 @@ Setiap tindakan penting menjadi satu langkah: klik pada tombol dan tautan, input
 
 Setiap langkah mendapatkan tangkapan layar dengan elemen yang diklik disorot dan diperbesar. Tanpa pemotongan manual, tanpa alat anotasi yang perlu dipelajari.
 
-| Browser | Versi | Instalasi |
-| ------- | ----- | --------- |
-| Chrome  | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] |
-| Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
-| Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
+| Browser | Dukungan | Metode Instalasi |
+| ------- | -------- | ---------------- |
+| Chrome / Brave / Vivaldi | Manifest V3 | [Pemasangan Manual (Developer Mode)](#️-pemasangan-manual-developer-mode) |
+| Microsoft Edge | Manifest V3 | [Pemasangan Manual (Developer Mode)](#️-pemasangan-manual-developer-mode) |
+| Opera / Opera GX | Manifest V3 | [Pemasangan Manual (Developer Mode)](#️-pemasangan-manual-developer-mode) |
+| Mozilla Firefox | Manifest V3 | [Pemasangan Manual (Developer Mode)](#️-pemasangan-manual-developer-mode) |
+
+> \[!NOTE]
+> **Catatan Mimik Plus**: Ini adalah versi kustom (*fork*). Karena membawa fitur-fitur baru (seperti Penyedia AI Kustom & Bahasa Indonesia) yang tidak ada pada versi asli, ekstensi ini dipasang secara manual menggunakan **Mode Pengembang** (*Developer Mode*) di browser-mu.
 
 Tersedia dalam Bahasa Inggris, Spanyol, Portugis Brasil, Prancis, Jerman, Mandarin, dan kini **Bahasa Indonesia**.
 

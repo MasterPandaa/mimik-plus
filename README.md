@@ -70,11 +70,15 @@ Every meaningful action becomes a step: clicks on buttons and links, form inputs
 
 Each step gets a screenshot with the clicked element highlighted and zoomed in. No manual cropping, no annotation tools to learn.
 
-| Browser | Version | Install |
-| ------- | ------- | ------- |
-| Chrome  | [![Chrome Version][chrome-version-shield]][chrome-link]   | [Chrome Web Store][chrome-link] |
-| Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
-| Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
+| Browser | Support | Installation Method |
+| ------- | ------- | ------------------- |
+| Chrome / Brave / Vivaldi | Manifest V3 | [Manual Installation (Developer Mode)](#️-manual-installation-developer-mode) |
+| Microsoft Edge | Manifest V3 | [Manual Installation (Developer Mode)](#️-manual-installation-developer-mode) |
+| Opera / Opera GX | Manifest V3 | [Manual Installation (Developer Mode)](#️-manual-installation-developer-mode) |
+| Mozilla Firefox | Manifest V3 | [Manual Installation (Developer Mode)](#️-manual-installation-developer-mode) |
+
+> \[!NOTE]
+> **Mimik Plus Notice**: This repository is a custom community fork. To use our new features (Custom AI Providers, Bahasa Indonesia, etc.), load the extension manually in your browser using **Developer Mode**.
 
 Available in English, Spanish, Brazilian Portuguese, French, German, Simplified Chinese, and now **Bahasa Indonesia**. The AI description language is set separately, so you can run Mimik in English and generate guides in any supported language.
 
