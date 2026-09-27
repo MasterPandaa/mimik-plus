@@ -34,6 +34,7 @@ Klik rekam, lakukan aktivitasmu, dapatkan panduan rapi dengan tangkapan layar be
 
 - [📺 Demo](#-demo)
 - [👋 Memulai](#-memulai)
+- [🛠️ Pemasangan Manual (Developer Mode)](#️-pemasangan-manual-developer-mode)
 - [✨ Fitur](#-fitur)
   - [🔒 Smart Blur](#-smart-blur)
   - [🧠 Deskripsi AI (opsional)](#-deskripsi-ai-opsional)
@@ -75,6 +76,70 @@ Setiap langkah mendapatkan tangkapan layar dengan elemen yang diklik disorot dan
 | Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
 
 Tersedia dalam Bahasa Inggris, Spanyol, Portugis Brasil, Prancis, Jerman, Mandarin, dan kini **Bahasa Indonesia**.
+
+## 🛠️ Pemasangan Manual (Developer Mode)
+
+Karena repositori ini adalah versi kustom (**Mimik Plus**), kamu dapat menginstalnya secara manual di browser favoritmu menggunakan **Mode Pengembang** (*Developer Mode*):
+
+### Langkah 1: Build Ekstensi
+
+Kloning repositori ini dan pasang dependensi:
+
+```bash
+git clone https://github.com/MasterPandaa/mimik-plus.git
+cd mimik-plus
+pnpm install   # atau npm install
+```
+
+Jalankan perintah build sesuai browser tujuan:
+- **Google Chrome / Edge / Brave / Vivaldi**:
+  ```bash
+  npm run build
+  ```
+  *(Hasil build tersimpan di folder `.output/chrome-mv3`)*
+- **Opera / Opera GX**:
+  ```bash
+  npm run build:opera
+  ```
+  *(Hasil build tersimpan di folder `.output/opera-mv3`)*
+- **Mozilla Firefox**:
+  ```bash
+  npm run build:firefox
+  ```
+  *(Hasil build tersimpan di folder `.output/firefox-mv3`)*
+
+---
+
+### Langkah 2: Muat Ekstensi di Browser
+
+#### 🌐 Google Chrome, Brave, & Vivaldi
+1. Buka browser, lalu navigasi ke `chrome://extensions` (atau `brave://extensions`).
+2. Aktifkan sakelar **Developer mode** (Mode Pengembang) di pojok kanan atas.
+3. Klik tombol **Load unpacked** (Muat yang dibuka kemasannya) di pojok kiri atas.
+4. Pilih folder hasil build: `.output/chrome-mv3`.
+5. Klik ikon **Ekstensi** di toolbar browser, lalu **Pin** Mimik Plus.
+
+#### 🌊 Microsoft Edge
+1. Navigasi ke `edge://extensions` di address bar Edge.
+2. Aktifkan **Developer mode** (Mode Pengembang) di bilah sisi kiri.
+3. Klik tombol **Load unpacked** (Muat yang dibuka kemasannya).
+4. Pilih folder hasil build: `.output/chrome-mv3`.
+5. **Pin** ekstensi Mimik Plus di toolbar.
+
+#### 🔴 Opera / Opera GX
+1. Navigasi ke `opera://extensions` di address bar Opera.
+2. Aktifkan **Developer mode** di pojok kanan atas.
+3. Klik tombol **Load unpacked** (Muat yang dibuka kemasannya).
+4. Pilih folder hasil build: `.output/opera-mv3` (atau `.output/chrome-mv3`).
+5. **Pin** ekstensi Mimik Plus di toolbar.
+
+#### 🦊 Mozilla Firefox
+1. Navigasi ke `about:debugging#/runtime/this-firefox` di address bar Firefox.
+2. Klik tombol **Load Temporary Add-on...** (Muat Pengaya Sementara...).
+3. Buka folder `.output/firefox-mv3` dan pilih file **`manifest.json`**.
+
+> \[!NOTE]
+> Untuk pengembangan langsung (*live reload*), kamu juga dapat menjalankan `npm run dev` (Chrome/Edge/Opera) atau `npm run dev:firefox` (Firefox).
 
 > \[!IMPORTANT]
 >

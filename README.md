@@ -34,6 +34,7 @@ Click record, do the thing, get a polished guide with annotated screenshots. Nar
 
 - [📺 Demo](#-demo)
 - [👋 Getting Started](#-getting-started)
+- [🛠️ Manual Installation (Developer Mode)](#️-manual-installation-developer-mode)
 - [✨ Features](#-features)
   - [🔒 Smart Blur](#-smart-blur)
   - [🧠 AI descriptions (optional)](#-ai-descriptions-optional)
@@ -76,6 +77,70 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 | Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
 
 Available in English, Spanish, Brazilian Portuguese, French, German, Simplified Chinese, and now **Bahasa Indonesia**. The AI description language is set separately, so you can run Mimik in English and generate guides in any supported language.
+
+## 🛠️ Manual Installation (Developer Mode)
+
+Since this repository is a custom version (**Mimik Plus**), you can install it manually in your preferred browser using **Developer Mode**:
+
+### Step 1: Build the Extension
+
+Clone this repository and install dependencies:
+
+```bash
+git clone https://github.com/MasterPandaa/mimik-plus.git
+cd mimik-plus
+pnpm install   # or npm install
+```
+
+Run the build command for your target browser:
+- **Google Chrome / Edge / Brave / Vivaldi**:
+  ```bash
+  npm run build
+  ```
+  *(Build output will be in `.output/chrome-mv3`)*
+- **Opera / Opera GX**:
+  ```bash
+  npm run build:opera
+  ```
+  *(Build output will be in `.output/opera-mv3`)*
+- **Mozilla Firefox**:
+  ```bash
+  npm run build:firefox
+  ```
+  *(Build output will be in `.output/firefox-mv3`)*
+
+---
+
+### Step 2: Load Extension into Browser
+
+#### 🌐 Google Chrome, Brave, & Vivaldi
+1. Open browser and navigate to `chrome://extensions` (or `brave://extensions`).
+2. Toggle on **Developer mode** in the top right corner.
+3. Click **Load unpacked** in the top left corner.
+4. Select the build directory: `.output/chrome-mv3`.
+5. Pin **Mimik Plus** from the extensions toolbar.
+
+#### 🌊 Microsoft Edge
+1. Navigate to `edge://extensions`.
+2. Toggle on **Developer mode** in the left sidebar.
+3. Click **Load unpacked**.
+4. Select the build directory: `.output/chrome-mv3`.
+5. Pin **Mimik Plus** from the toolbar.
+
+#### 🔴 Opera / Opera GX
+1. Navigate to `opera://extensions`.
+2. Enable **Developer mode** in the top right corner.
+3. Click **Load unpacked**.
+4. Select the build directory: `.output/opera-mv3` (or `.output/chrome-mv3`).
+5. Pin **Mimik Plus** from the toolbar.
+
+#### 🦊 Mozilla Firefox
+1. Navigate to `about:debugging#/runtime/this-firefox`.
+2. Click **Load Temporary Add-on...**.
+3. Select `manifest.json` inside `.output/firefox-mv3`.
+
+> \[!NOTE]
+> For active development with live reload, you can run `npm run dev` (Chrome/Edge/Opera) or `npm run dev:firefox` (Firefox).
 
 > \[!IMPORTANT]
 >
