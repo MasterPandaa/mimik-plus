@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { i18n } from '#imports';
 import { dismissUpdateNotice, readUpdateNotice } from '@/lib/update-notice';
 
-const RELEASES_URL = 'https://github.com/westpoint-io/mimik/releases';
+const RELEASES_URL = 'https://github.com/MasterPandaa/mimik-plus/releases';
 
 export default function UpdateNotice({ className = '' }: { className?: string }) {
   const [version, setVersion] = useState<string>();

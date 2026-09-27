@@ -33,7 +33,7 @@ interface StepProps {
   total: number;
 }
 
-const REPO_URL = 'https://github.com/westpoint-io/mimik';
+const REPO_URL = 'https://github.com/MasterPandaa/mimik-plus';
 
 const CUSTOM_OPTION = '__custom__';
 
