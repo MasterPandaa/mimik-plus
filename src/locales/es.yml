@@ -143,6 +143,35 @@ settings:
   starCtaTitle: "¿Te gusta Mimik?"
   starCtaMessage: "Una estrella en GitHub nos ayuda un montón y hace que más gente descubra Mimik."
   starOnGithub: Dar estrella en GitHub
+  customProviders: "Proveedores personalizados"
+  customProvidersHint: "Conecta cualquier API compatible con OpenAI, al estilo opencode: tu propia URL base, modelos y cabeceras."
+  noCustomProviders: "Aún no hay proveedores personalizados."
+  addProvider: "Añadir proveedor"
+  addCustomProvider: "Añadir proveedor personalizado…"
+  editProvider: "Editar proveedor"
+  useProvider: Usar
+  inUse: "En uso"
+  providerId: "ID de proveedor"
+  providerIdHint: "Letras minúsculas, números, guiones o guiones bajos."
+  providerModelCount: "$1 modelos"
+  displayName: "Nombre visible"
+  apiKeyOptionalHint: "Opcional. Déjalo vacío si gestionas la autenticación con cabeceras."
+  models: Modelos
+  modelId: "ID de modelo"
+  modelName: "Nombre visible"
+  addModel: "Añadir modelo"
+  headers: Cabeceras
+  headerName: "Nombre de cabecera"
+  headerValue: Valor
+  addHeader: "Añadir cabecera"
+  deleteProviderConfirm: '¿Eliminar el proveedor "$1"?'
+  providerIdRequired: "El ID de proveedor es obligatorio."
+  providerIdInvalid: "Usa solo minúsculas, números, guiones o guiones bajos."
+  providerIdTaken: "Este ID de proveedor ya está en uso."
+  providerBaseUrlRequired: "La URL base es obligatoria."
+  providerBaseUrlInvalid: "Introduce una URL http(s) válida."
+  providerModelsRequired: "Añade al menos un modelo."
+  providerBaseUrlManaged: "La URL base se gestiona en Proveedores personalizados, abajo."
 
 blurPresets:
   email: Correo electrónico
@@ -229,6 +258,12 @@ editor:
   rewriteErrorNoApiKey: "A\xF1ade una clave de API de IA en los ajustes para reescribir texto."
   rewriteErrorFailed: "No se pudo reescribir la selecci\xF3n. Int\xE9ntalo de nuevo."
   rewriteErrorStale: "El texto cambi\xF3. Vuelve a seleccionarlo."
+  fillWithAi: Rellenar con IA
+  fillAllWithAi: Rellenar todo con IA
+  regenerateTitle: Regenerar título
+  fillStepsDone: "$1 descripciones generadas"
+  fillStepsNone: Ningún paso necesita una descripción de IA.
+  fillStepsError: No se pudieron generar las descripciones. Inténtalo de nuevo.
 
 capture:
   recordSteps: Grabar pasos

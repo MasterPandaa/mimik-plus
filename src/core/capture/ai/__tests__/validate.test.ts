@@ -368,4 +368,49 @@ describe('validateApiKey', () => {
       expect(await validateApiKey('openai', 'sk-good')).toEqual({ valid: true, models: ['gpt-4o-mini'] });
     });
   });
+
+  describe('custom providers', () => {
+    it('probes the custom base URL with chat completions', async () => {
+      fetchMock.mockResolvedValueOnce(chatOkBody());
+      fetchMock.mockResolvedValueOnce(modelsBody('my-model'));
+      expect(await validateApiKey('custom:my-provider', 'sk-custom', 'https://api.example.com/v1', 'my-model')).toEqual(
+        { valid: true, models: ['my-model'] },
+      );
+      expect(fetchMock.mock.calls[0][0]).toBe('https://api.example.com/v1/chat/completions');
+      expect((fetchMock.mock.calls[0][1]!.headers as Record<string, string>).Authorization).toBe('Bearer sk-custom');
+    });
+
+    it('forwards custom headers and lets them override the bearer token', async () => {
+      fetchMock.mockResolvedValueOnce(chatOkBody());
+      fetchMock.mockResolvedValueOnce(modelsBody('my-model'));
+      await validateApiKey('custom:my-provider', 'sk-custom', 'https://api.example.com/v1', 'my-model', {
+        'X-Team': 'red',
+        Authorization: 'Key custom-secret',
+      });
+      const sent = fetchMock.mock.calls[0][1]!.headers as Record<string, string>;
+      expect(sent['X-Team']).toBe('red');
+      expect(sent.Authorization).toBe('Key custom-secret');
+    });
+
+    it('supports header-only auth by omitting the empty bearer token', async () => {
+      fetchMock.mockResolvedValueOnce(chatOkBody());
+      fetchMock.mockResolvedValueOnce(modelsBody('my-model'));
+      expect(
+        await validateApiKey('custom:my-provider', '', 'https://api.example.com/v1', 'my-model', {
+          Authorization: 'Bearer tok',
+        }),
+      ).toEqual({ valid: true, models: ['my-model'] });
+      const sent = fetchMock.mock.calls[0][1]!.headers as Record<string, string>;
+      expect(sent.Authorization).toBe('Bearer tok');
+      expect(JSON.stringify(sent)).not.toContain('Bearer  ');
+    });
+
+    it('reports unreachable when the custom provider has no base URL', async () => {
+      expect(await validateApiKey('custom:my-provider', 'sk-custom', '', 'my-model')).toEqual({
+        valid: false,
+        reason: 'network',
+      });
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+  });
 });

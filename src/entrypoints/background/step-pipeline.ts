@@ -1,4 +1,4 @@
-import { AI_KEY_SETTINGS, resolveAiKey } from '@/core/capture/ai/keys';
+import { AI_RUNTIME_SETTINGS, resolveAiRuntime } from '@/core/capture/ai/custom-providers';
 import type { DOMContext } from '@/core/capture/dom/context';
 import { CaptureState } from '@/core/capture/machine';
 import { buildFallbackDescription } from '@/core/capture/step-description';
@@ -21,10 +21,10 @@ import { deferDescription, shouldQueueAiDescription } from './deferred-descripti
 import { queueDescription } from './description-queue';
 import { flushNarrationForStep, getVoiceUpdate } from './voice';
 
-async function takeScreenshot(stepId: string, meta: ElementMeta): Promise<string | undefined> {
+async function takeScreenshot(stepId: string, meta: ElementMeta, windowId?: number): Promise<string | undefined> {
   try {
     const { targetColor } = await localStorage.get(['targetColor']);
-    const dataUrl = await captureVisibleTab('jpeg', 90);
+    const dataUrl = await captureVisibleTab('jpeg', 90, windowId);
     const blob = await fetch(dataUrl).then((r) => r.blob());
     const img = await createImageBitmap(blob);
     const screenshot: Screenshot = {
@@ -57,8 +57,12 @@ async function takeScreenshot(stepId: string, meta: ElementMeta): Promise<string
   }
 }
 
+async function hasAiAuth(): Promise<boolean> {
+  return resolveAiRuntime(await localStorage.get([...AI_RUNTIME_SETTINGS])) !== null;
+}
+
 async function tryAIDescription(stepId: string, domContext: DOMContext) {
-  if (!resolveAiKey(await localStorage.get([...AI_KEY_SETTINGS])).apiKey) return;
+  if (!(await hasAiAuth())) return;
   try {
     await clearStepAiPending(stepId, await generateAiDescription(domContext));
   } catch (err) {
@@ -67,7 +71,7 @@ async function tryAIDescription(stepId: string, domContext: DOMContext) {
   }
 }
 
-export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureStepResponse> {
+export async function handleCaptureStep(data: CaptureStepData, windowId?: number): Promise<CaptureStepResponse> {
   const snap = getActor().getSnapshot();
   if (snap.value !== CaptureState.RECORDING) return { ignored: true };
 
@@ -77,10 +81,10 @@ export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureS
   const guideId = snap.context.currentGuideId!;
   const stepId = crypto.randomUUID();
 
-  const screenshotId = await takeScreenshot(stepId, data.elementMeta);
+  const screenshotId = await takeScreenshot(stepId, data.elementMeta, windowId);
 
   const narrationCapturing = getVoiceUpdate().phase === 'recording';
-  const hasAiKey = !!resolveAiKey(await localStorage.get([...AI_KEY_SETTINGS])).apiKey;
+  const hasAiKey = await hasAiAuth();
   const willUseAI = shouldQueueAiDescription({
     action: data.action,
     hasDomContext: !!data.domContext,
@@ -101,6 +105,7 @@ export async function handleCaptureStep(data: CaptureStepData): Promise<CaptureS
     elementMeta: data.elementMeta,
     descriptionSource: 'heuristic',
     aiPending: willUseAI || narrationCapturing,
+    ...(data.domContext ? { domContext: JSON.stringify(data.domContext) } : {}),
   });
   await addStepToGuide(guideId, stepId);
 
@@ -126,10 +131,12 @@ export async function handleFinalizeInputStep(
   stepId: string,
   elementMeta: ElementMeta,
   domContext: DOMContext | undefined,
+  windowId?: number,
 ) {
-  const screenshotId = await takeScreenshot(stepId, elementMeta);
+  const screenshotId = await takeScreenshot(stepId, elementMeta, windowId);
   const updates: Partial<Step> = { elementMeta };
   if (screenshotId) updates.screenshotId = screenshotId;
+  if (domContext) updates.domContext = JSON.stringify(domContext);
   await db.steps.update(stepId, updates);
 
   const guideId = (await db.steps.get(stepId))?.guideId;

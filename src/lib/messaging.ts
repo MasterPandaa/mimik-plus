@@ -92,8 +92,18 @@ export interface GenerateGuideDescriptionData {
 
 export interface GenerateGuideDescriptionResponse {
   description?: string;
+  title?: string;
   error?: GuideDescriptionError;
 }
+
+export type StepDescriptionsError = GuideDescriptionError;
+
+export interface GenerateStepDescriptionsData {
+  guideId: string;
+  stepIds?: string[];
+}
+
+export type GenerateStepDescriptionsResponse = { updated: number } | { error: StepDescriptionsError };
 
 export type RewriteError = 'no-api-key' | 'generation-failed';
 
@@ -112,6 +122,7 @@ export interface ValidateApiKeyData {
   apiKey: string;
   baseUrl?: string;
   model?: string;
+  headers?: Record<string, string>;
 }
 
 export interface ValidateApiKeyResponse {
@@ -148,6 +159,8 @@ interface MimikProtocol {
   exitBlurMode(): ExitBlurModeResponse;
   startNarration(): StartNarrationResponse;
   generateGuideDescription(data: GenerateGuideDescriptionData): GenerateGuideDescriptionResponse;
+  generateGuideTitle(data: GenerateGuideDescriptionData): GenerateGuideDescriptionResponse;
+  generateStepDescriptions(data: GenerateStepDescriptionsData): GenerateStepDescriptionsResponse;
   validateApiKey(data: ValidateApiKeyData): ValidateApiKeyResponse;
   rewriteSelection(data: RewriteSelectionData): RewriteSelectionResponse;
 }

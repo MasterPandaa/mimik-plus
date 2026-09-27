@@ -2,14 +2,18 @@ import { Globe, Mic, MousePointerClick, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { browser, i18n } from '#imports';
 import { PRESET_LABELS, type PresetKey } from '@/core/blur/regexes';
+import { type CustomProviderMap, parseCustomProviders } from '@/core/capture/ai/custom-providers';
 import { type AIApiKeys, keyFor, migrateApiKeys, withKeyFor } from '@/core/capture/ai/keys';
 import {
   AI_PROVIDERS,
   type AIProviderKey,
+  type AIProviderSelection,
   CUSTOM_MODEL_VALUE,
+  customProviderIdOf,
   DEFAULT_AI_PROVIDER,
   isCustomBaseUrl,
   isCustomModel,
+  isCustomProviderSelection,
   providerOrDefault,
 } from '@/core/capture/ai/models';
 import { AI_LANGUAGES, type AILanguageCode } from '@/core/capture/ai/prompts';
@@ -17,6 +21,7 @@ import type { VoiceProvider } from '@/core/capture/voice/transcribe';
 import { localStorage, openSidebar, requestHostPermissions } from '@/lib/browser-api';
 import { Input } from '@/ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/ui/components/ui/select';
+import CustomProvidersSection from '@/ui/shared/CustomProviders';
 import { KeyStatusNote, KeyWarningNote, ModelList, SecretInput, useKeyCheck } from '@/ui/shared/key-check';
 import MicrophonePicker from '@/ui/shared/MicrophonePicker';
 
@@ -29,6 +34,8 @@ interface StepProps {
 }
 
 const REPO_URL = 'https://github.com/westpoint-io/mimik';
+
+const CUSTOM_OPTION = '__custom__';
 
 const BLUR_PRESET_I18N: Record<PresetKey, string> = {
   email: 'email',
@@ -125,7 +132,7 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
 }
 
 function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
-  const [provider, setProvider] = useState<AIProviderKey>('openai');
+  const [provider, setProvider] = useState<string>('openai');
   const [model, setModel] = useState(AI_PROVIDERS.openai.defaultModel);
   const [apiKey, setApiKey] = useState('');
   const [apiKeys, setApiKeys] = useState<AIApiKeys>({});
@@ -133,23 +140,37 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
   const [aiLanguage, setAiLanguage] = useState<AILanguageCode>('en');
   const [ownServer, setOwnServer] = useState(false);
   const [customModel, setCustomModel] = useState(false);
+  const [customProviders, setCustomProviders] = useState<CustomProviderMap>({});
+  const [customSectionOpen, setCustomSectionOpen] = useState(false);
   const aiKeyCheck = useKeyCheck();
 
   useEffect(() => {
     const load = () =>
-      localStorage.get(['aiProvider', 'aiModel', 'aiApiKey', 'aiApiKeys', 'aiBaseUrl', 'aiLanguage']).then((stored) => {
-        const key = providerOrDefault(stored.aiProvider);
-        setProvider(key);
-        if (typeof stored.aiModel === 'string') setModel(stored.aiModel);
-        const keys = migrateApiKeys(stored);
-        setApiKeys(keys);
-        setApiKey(keyFor(keys, key));
-        if (isCustomBaseUrl(AI_PROVIDERS[key], stored.aiBaseUrl as string)) {
-          setBaseUrl(stored.aiBaseUrl as string);
-          setOwnServer(true);
-        }
-        if (typeof stored.aiLanguage === 'string') setAiLanguage(stored.aiLanguage as AILanguageCode);
-      });
+      localStorage
+        .get(['aiProvider', 'aiModel', 'aiApiKey', 'aiApiKeys', 'aiBaseUrl', 'aiCustomProviders', 'aiLanguage'])
+        .then((stored) => {
+          const customs = parseCustomProviders(stored.aiCustomProviders);
+          setCustomProviders(customs);
+          const raw = stored.aiProvider as string | undefined;
+          if (isCustomProviderSelection(raw) && customs[customProviderIdOf(raw)]) {
+            setProvider(raw);
+            setCustomSectionOpen(true);
+            if (typeof stored.aiModel === 'string') setModel(stored.aiModel);
+            if (typeof stored.aiLanguage === 'string') setAiLanguage(stored.aiLanguage as AILanguageCode);
+            return;
+          }
+          const key = providerOrDefault(raw);
+          setProvider(key);
+          if (typeof stored.aiModel === 'string') setModel(stored.aiModel);
+          const keys = migrateApiKeys(stored);
+          setApiKeys(keys);
+          setApiKey(keyFor(keys, key));
+          if (isCustomBaseUrl(AI_PROVIDERS[key], stored.aiBaseUrl as string)) {
+            setBaseUrl(stored.aiBaseUrl as string);
+            setOwnServer(true);
+          }
+          if (typeof stored.aiLanguage === 'string') setAiLanguage(stored.aiLanguage as AILanguageCode);
+        });
 
     void load();
     const onVisible = () => {
@@ -159,20 +180,58 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, []);
 
-  const providerConfig = AI_PROVIDERS[provider] ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
+  const activeCustomId = isCustomProviderSelection(provider) ? customProviderIdOf(provider) : null;
+  const activeCustom = activeCustomId ? customProviders[activeCustomId] : undefined;
+  const showCustom = customSectionOpen || !!activeCustom;
+  const providerConfig =
+    AI_PROVIDERS[(isCustomProviderSelection(provider) ? DEFAULT_AI_PROVIDER : provider) as AIProviderKey] ??
+    AI_PROVIDERS[DEFAULT_AI_PROVIDER];
   const usingCustomModel = customModel || isCustomModel(model, providerConfig);
 
-  const handleProviderChange = (newProvider: AIProviderKey) => {
-    const nextModel = AI_PROVIDERS[newProvider].defaultModel;
-    setProvider(newProvider);
+  const handleProviderChange = (newProvider: string) => {
+    if (newProvider === CUSTOM_OPTION) {
+      setCustomSectionOpen(true);
+      aiKeyCheck.reset();
+      return;
+    }
+    const builtin = providerOrDefault(newProvider);
+    setCustomSectionOpen(false);
+    const nextModel = AI_PROVIDERS[builtin].defaultModel;
+    setProvider(builtin);
     setModel(nextModel);
     setCustomModel(false);
     setOwnServer(false);
     setBaseUrl('');
-    const nextKey = keyFor(apiKeys, newProvider);
+    const nextKey = keyFor(apiKeys, builtin);
     setApiKey(nextKey);
     aiKeyCheck.reset();
-    void localStorage.set({ aiProvider: newProvider, aiModel: nextModel, aiBaseUrl: '', aiApiKey: nextKey });
+    void localStorage.set({ aiProvider: builtin, aiModel: nextModel, aiBaseUrl: '', aiApiKey: nextKey });
+  };
+
+  const handleCustomProvidersChange = (next: CustomProviderMap) => {
+    setCustomProviders(next);
+    void localStorage.set({ aiCustomProviders: next });
+  };
+
+  const pickProviderFromCard = (selection: string, map: CustomProviderMap) => {
+    setCustomProviders(map);
+    if (!isCustomProviderSelection(selection)) {
+      void localStorage.set({ aiCustomProviders: map });
+      setCustomSectionOpen(false);
+      handleProviderChange(selection);
+      return;
+    }
+    setProvider(selection);
+    setCustomSectionOpen(true);
+    aiKeyCheck.reset();
+    const custom = map[customProviderIdOf(selection)];
+    const nextModel = custom?.models[0]?.id ?? '';
+    setModel(nextModel);
+    void localStorage.set({
+      aiCustomProviders: map,
+      aiProvider: selection as AIProviderSelection,
+      aiModel: nextModel,
+    });
   };
 
   const handleOwnServerToggle = () => {
@@ -232,7 +291,7 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
               <label className="block text-xs font-semibold text-foreground mb-1.5">
                 {i18n.t('settings.provider')}
               </label>
-              <Select value={provider} onValueChange={(v) => handleProviderChange(v as AIProviderKey)}>
+              <Select value={showCustom ? CUSTOM_OPTION : provider} onValueChange={handleProviderChange}>
                 <SelectTrigger className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10">
                   <SelectValue />
                 </SelectTrigger>
@@ -242,110 +301,126 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
                       {cfg.label}
                     </SelectItem>
                   ))}
+                  <SelectItem value={CUSTOM_OPTION}>{i18n.t('settings.customProviders')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">{i18n.t('settings.model')}</label>
-              <Select value={usingCustomModel ? CUSTOM_MODEL_VALUE : model} onValueChange={handleModelChange}>
-                <SelectTrigger className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {providerConfig.models.map((m) => (
-                    <SelectItem key={m.id} value={m.id}>
-                      {m.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {usingCustomModel && (
-                <Input
-                  type="text"
-                  value={model}
-                  onChange={(e) => {
-                    setModel(e.target.value);
-                    aiKeyCheck.reset();
-                    void localStorage.set({ aiModel: e.target.value });
-                  }}
-                  placeholder={providerConfig.defaultModel}
-                  className="w-full mt-1.5 h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
-                />
-              )}
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">{i18n.t('settings.apiKey')}</label>
-              <SecretInput
-                value={apiKey}
-                onChange={handleApiKeyChange}
-                placeholder="sk-..."
-                className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
-                buttonClassName="right-3"
+            {showCustom ? (
+              <CustomProvidersSection
+                providers={customProviders}
+                selectedId={activeCustomId}
+                onChange={handleCustomProvidersChange}
+                onPickProvider={pickProviderFromCard}
               />
-              <div className="flex items-center gap-3 mt-2">
-                <button
-                  type="button"
-                  disabled={!apiKey || aiKeyCheck.status === 'checking'}
-                  onClick={() => {
-                    if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
-                  }}
-                  className="px-4 py-2 bg-card text-foreground border border-border rounded-lg font-semibold text-xs hover:border-accent hover:text-accent transition-colors disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  {i18n.t('settings.checkKey')}
-                </button>
-                <div className="min-w-0">
-                  <KeyStatusNote status={aiKeyCheck.status} />
-                  <KeyWarningNote warning={aiKeyCheck.warning} />
+            ) : (
+              <>
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">
+                    {i18n.t('settings.model')}
+                  </label>
+                  <Select value={usingCustomModel ? CUSTOM_MODEL_VALUE : model} onValueChange={handleModelChange}>
+                    <SelectTrigger className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {providerConfig.models.map((m) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          {m.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {usingCustomModel && (
+                    <Input
+                      type="text"
+                      value={model}
+                      onChange={(e) => {
+                        setModel(e.target.value);
+                        aiKeyCheck.reset();
+                        void localStorage.set({ aiModel: e.target.value });
+                      }}
+                      placeholder={providerConfig.defaultModel}
+                      className="w-full mt-1.5 h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
+                    />
+                  )}
                 </div>
-              </div>
-              {aiKeyCheck.models && <ModelList models={aiKeyCheck.models} />}
-            </div>
 
-            <div>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-xs font-semibold text-foreground flex items-center gap-1">
-                  <Globe size={12} className="-mt-px" />
-                  {i18n.t('settings.useOwnServer')}
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={ownServer}
-                  aria-label={i18n.t('settings.useOwnServer')}
-                  onClick={handleOwnServerToggle}
-                  className={`w-10 h-6 rounded-full transition-colors relative shrink-0 ${
-                    ownServer ? 'bg-accent' : 'bg-border'
-                  }`}
-                >
-                  <span
-                    className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
-                      ownServer ? 'translate-x-4' : 'translate-x-0'
-                    }`}
-                  />
-                </button>
-              </div>
-              {ownServer && (
-                <div className="mt-2 space-y-2">
-                  <Input
-                    type="text"
-                    value={baseUrl}
-                    onChange={(e) => handleBaseUrlChange(e.target.value)}
-                    placeholder={providerConfig.defaultBaseUrl}
-                    aria-label={i18n.t('settings.baseUrl')}
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">
+                    {i18n.t('settings.apiKey')}
+                  </label>
+                  <SecretInput
+                    value={apiKey}
+                    onChange={handleApiKeyChange}
+                    placeholder="sk-..."
                     className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
+                    buttonClassName="right-3"
                   />
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">
-                    {i18n.t(
-                      providerConfig.protocol === 'anthropic'
-                        ? 'settings.ownServerHintAnthropic'
-                        : 'settings.ownServerHintOpenai',
-                    )}
-                  </p>
+                  <div className="flex items-center gap-3 mt-2">
+                    <button
+                      type="button"
+                      disabled={!apiKey || aiKeyCheck.status === 'checking'}
+                      onClick={() => {
+                        if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
+                      }}
+                      className="px-4 py-2 bg-card text-foreground border border-border rounded-lg font-semibold text-xs hover:border-accent hover:text-accent transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      {i18n.t('settings.checkKey')}
+                    </button>
+                    <div className="min-w-0">
+                      <KeyStatusNote status={aiKeyCheck.status} />
+                      <KeyWarningNote warning={aiKeyCheck.warning} />
+                    </div>
+                  </div>
+                  {aiKeyCheck.models && <ModelList models={aiKeyCheck.models} />}
                 </div>
-              )}
-            </div>
+
+                <div>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-xs font-semibold text-foreground flex items-center gap-1">
+                      <Globe size={12} className="-mt-px" />
+                      {i18n.t('settings.useOwnServer')}
+                    </span>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={ownServer}
+                      aria-label={i18n.t('settings.useOwnServer')}
+                      onClick={handleOwnServerToggle}
+                      className={`w-10 h-6 rounded-full transition-colors relative shrink-0 ${
+                        ownServer ? 'bg-accent' : 'bg-border'
+                      }`}
+                    >
+                      <span
+                        className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                          ownServer ? 'translate-x-4' : 'translate-x-0'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  {ownServer && (
+                    <div className="mt-2 space-y-2">
+                      <Input
+                        type="text"
+                        value={baseUrl}
+                        onChange={(e) => handleBaseUrlChange(e.target.value)}
+                        placeholder={providerConfig.defaultBaseUrl}
+                        aria-label={i18n.t('settings.baseUrl')}
+                        className="w-full h-11 rounded-xl px-4 text-sm focus:border-accent focus:ring-accent/10"
+                      />
+                      <p className="text-[11px] text-muted-foreground leading-relaxed">
+                        {i18n.t(
+                          providerConfig.protocol === 'anthropic'
+                            ? 'settings.ownServerHintAnthropic'
+                            : 'settings.ownServerHintOpenai',
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
 
             <div>
               <label className="block text-xs font-semibold text-foreground mb-1.5">

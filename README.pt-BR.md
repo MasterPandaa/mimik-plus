@@ -2,13 +2,15 @@
 
 <img src="public/mascot.svg" width="140" height="140" alt="Mascote do Mimik" />
 
-# Mimik
+# Mimik Plus
 
-[English](./README.md) · [Español](./README.es.md) · **Português (BR)** · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md)
+[English](./README.md) · [Español](./README.es.md) · **Português (BR)** · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md) · [Bahasa Indonesia](./README.id.md)
 
 **Captura qualquer fluxo no navegador e transforma num guia passo a passo. Sem conta, sem nuvem, sem rastreio.**
 
 Clica em gravar, faz o que precisa, e recebe um guia caprichado com capturas de tela anotadas. Edita, reproduz ou exporta.
+
+> **Este é um fork comunitário do [Mimik](https://github.com/westpoint-io/mimik) criado pela Westpoint**, com funcionalidades adicionais como suporte a provedores de IA personalizados, idioma Bahasa Indonesia e outras melhorias. Todo o crédito original pertence à equipe Westpoint.
 
 <!-- SHIELD GROUP -->
 

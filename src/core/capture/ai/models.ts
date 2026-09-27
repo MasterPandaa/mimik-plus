@@ -82,6 +82,27 @@ export type AIProviderKey = keyof typeof AI_PROVIDERS;
 
 export const DEFAULT_AI_PROVIDER: AIProviderKey = 'openai';
 
+/** Prefix for user-defined providers, e.g. `custom:my-provider` (opencode-style). */
+export const CUSTOM_PROVIDER_PREFIX = 'custom:';
+
+export type AIProviderSelection = AIProviderKey | `custom:${string}`;
+
+export function isCustomProviderSelection(value: unknown): value is `custom:${string}` {
+  return (
+    typeof value === 'string' &&
+    value.startsWith(CUSTOM_PROVIDER_PREFIX) &&
+    value.length > CUSTOM_PROVIDER_PREFIX.length
+  );
+}
+
+export function customProviderIdOf(selection: string): string {
+  return selection.startsWith(CUSTOM_PROVIDER_PREFIX) ? selection.slice(CUSTOM_PROVIDER_PREFIX.length) : selection;
+}
+
+export function selectionForCustomProvider(id: string): `custom:${string}` {
+  return `${CUSTOM_PROVIDER_PREFIX}${id}`;
+}
+
 export function isProviderKey(value: unknown): value is AIProviderKey {
   return typeof value === 'string' && value in AI_PROVIDERS;
 }

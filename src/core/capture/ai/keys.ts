@@ -1,12 +1,12 @@
-import { type AIProviderKey, isProviderKey, providerOrDefault } from './models';
+import { type AIProviderKey, isCustomProviderSelection, isProviderKey, providerOrDefault } from './models';
 
-export type AIApiKeys = Partial<Record<AIProviderKey, string>>;
+export type AIApiKeys = Partial<Record<string, string>>;
 
 export function parseApiKeys(value: unknown): AIApiKeys {
   if (typeof value !== 'object' || value === null) return {};
   const keys: AIApiKeys = {};
   for (const [provider, key] of Object.entries(value as Record<string, unknown>)) {
-    if (!isProviderKey(provider)) continue;
+    if (!isProviderKey(provider) && !isCustomProviderSelection(provider)) continue;
     const trimmed = typeof key === 'string' ? key.trim() : '';
     if (trimmed) keys[provider] = trimmed;
   }
@@ -21,11 +21,11 @@ export function migrateApiKeys(stored: { aiApiKeys?: unknown; aiApiKey?: unknown
   return legacy ? { [providerOrDefault(stored.aiProvider)]: legacy } : {};
 }
 
-export function keyFor(keys: AIApiKeys, provider: AIProviderKey): string {
+export function keyFor(keys: AIApiKeys, provider: string): string {
   return keys[provider] ?? '';
 }
 
-export function withKeyFor(keys: AIApiKeys, provider: AIProviderKey, apiKey: string): AIApiKeys {
+export function withKeyFor(keys: AIApiKeys, provider: string, apiKey: string): AIApiKeys {
   const next = { ...keys };
   const trimmed = apiKey.trim();
   if (trimmed) next[provider] = apiKey;

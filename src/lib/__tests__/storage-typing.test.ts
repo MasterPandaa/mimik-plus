@@ -22,4 +22,21 @@ describe('storage access is checked against the declared settings', () => {
     // @ts-expect-error voiceEnabled is a boolean
     void localStorage.set({ voiceEnabled: 'yes' });
   });
+
+  it('accepts built-in and custom provider selections', () => {
+    void localStorage.set({ aiProvider: 'openai' });
+    void localStorage.set({ aiProvider: 'custom:my-provider' });
+    void localStorage.set({
+      aiCustomProviders: {
+        'my-provider': {
+          id: 'my-provider',
+          name: 'My Provider',
+          baseUrl: 'https://api.example.com/v1',
+          apiKey: '',
+          models: [{ id: 'my-model', label: 'My Model' }],
+          headers: [],
+        },
+      },
+    });
+  });
 });

@@ -15,6 +15,7 @@ import type { Step } from '@/core/guides/types';
 import {
   getActiveTab,
   localStorage,
+  openSidebar,
   sendMessageToTab,
   setSidePanelBehavior,
   toggleSidebar,
@@ -25,8 +26,14 @@ import { onMessage } from '@/lib/messaging';
 import { broadcastStateToPanel, setupPortListener } from '@/lib/port';
 import { recordUpdate } from '@/lib/update-notice';
 import { getActor, getStateUpdate, initActor, initActorFallback, waitUntilReady } from './actor';
-import { generateDescriptionOnDemand, generateGuideMetaOnStop, settlePendingDescriptions } from './guide-meta';
+import {
+  generateDescriptionOnDemand,
+  generateGuideMetaOnStop,
+  generateTitleOnDemand,
+  settlePendingDescriptions,
+} from './guide-meta';
 import { registerNavigationListeners } from './navigation';
+import { handleGenerateStepDescriptions } from './step-ai';
 import { handleCaptureStep, handleFinalizeInputStep, handleUpdateInputStep } from './step-pipeline';
 import { broadcastStartCapture, broadcastStopCapture, showNotificationOnTab } from './tab-manager';
 import {
@@ -81,6 +88,10 @@ export default defineBackground(() => {
   if (import.meta.env.BROWSER === 'firefox') {
     browser.action.onClicked.addListener(() => {
       toggleSidebar();
+    });
+  } else {
+    browser.action.onClicked.addListener(() => {
+      openSidebar();
     });
   }
   initActor().catch(initActorFallback);
@@ -184,13 +195,19 @@ export default defineBackground(() => {
 
   onMessage('generateGuideDescription', ({ data }) => generateDescriptionOnDemand(data.guideId));
 
-  onMessage('validateApiKey', ({ data }) => validateApiKey(data.provider, data.apiKey, data.baseUrl, data.model));
+  onMessage('generateGuideTitle', ({ data }) => generateTitleOnDemand(data.guideId));
+
+  onMessage('generateStepDescriptions', ({ data }) => handleGenerateStepDescriptions(data.guideId, data.stepIds));
+
+  onMessage('validateApiKey', ({ data }) =>
+    validateApiKey(data.provider, data.apiKey, data.baseUrl, data.model, data.headers),
+  );
 
   onMessage('rewriteSelection', ({ data }) => rewriteSelection(data.text, data.instruction));
 
-  onMessage('captureStep', async ({ data }) => {
+  onMessage('captureStep', async ({ data, sender }) => {
     await waitUntilReady();
-    return handleCaptureStep(data);
+    return handleCaptureStep(data, sender.tab?.windowId);
   });
 
   onMessage('updateInputStep', async ({ data }) => {
@@ -199,9 +216,9 @@ export default defineBackground(() => {
     return { updated: true };
   });
 
-  onMessage('finalizeInputStep', async ({ data }) => {
+  onMessage('finalizeInputStep', async ({ data, sender }) => {
     await waitUntilReady();
-    await handleFinalizeInputStep(data.stepId, data.elementMeta, data.domContext);
+    await handleFinalizeInputStep(data.stepId, data.elementMeta, data.domContext, sender.tab?.windowId);
     return { updated: true };
   });
 

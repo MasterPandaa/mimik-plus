@@ -37,6 +37,10 @@ describe('getLanguageSuffix', () => {
     expect(getLanguageSuffix('zh-CN')).toContain('Chinese');
   });
 
+  it('returns Indonesian suffix for id', () => {
+    expect(getLanguageSuffix('id')).toContain('Indonesian');
+  });
+
   it('returns Brazilian Portuguese suffix for pt-BR', () => {
     expect(getLanguageSuffix('pt-BR')).toContain('Brazilian Portuguese');
   });
@@ -53,8 +57,8 @@ describe('getLanguageSuffix', () => {
 });
 
 describe('AI_LANGUAGES', () => {
-  it('has 6 supported languages', () => {
-    expect(AI_LANGUAGES).toHaveLength(6);
+  it('has 7 supported languages', () => {
+    expect(AI_LANGUAGES).toHaveLength(7);
   });
 
   it('includes English as first entry', () => {
@@ -63,6 +67,10 @@ describe('AI_LANGUAGES', () => {
 
   it('includes Simplified Chinese', () => {
     expect(AI_LANGUAGES).toContainEqual({ code: 'zh-CN', label: '中文' });
+  });
+
+  it('includes Indonesian right after English', () => {
+    expect(AI_LANGUAGES[1]).toEqual({ code: 'id', label: 'Bahasa Indonesia' });
   });
 
   it('each entry has code and label', () => {

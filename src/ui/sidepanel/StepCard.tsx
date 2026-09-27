@@ -1,4 +1,4 @@
-import { Check, Copy, Loader2, Trash2 } from 'lucide-react';
+import { Check, Copy, Loader2, Sparkles, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { i18n } from '#imports';
 import { replaceScreenshot } from '@/core/guides/service';
@@ -27,6 +27,8 @@ interface StepCardProps {
   readOnly?: boolean;
   onChanged?: () => void;
   hasApiKey?: boolean;
+  onFillWithAi?: (stepId: string) => void;
+  fillBusy?: boolean;
 }
 
 export default function StepCard({
@@ -42,6 +44,8 @@ export default function StepCard({
   readOnly,
   onChanged,
   hasApiKey,
+  onFillWithAi,
+  fillBusy,
 }: StepCardProps) {
   const [description, setDescription] = useState(step.description);
   const [dragOver, setDragOver] = useState(false);
@@ -155,6 +159,29 @@ export default function StepCard({
           {step.aiPending ? <span /> : <StepSourceBadge source={step.descriptionSource} />}
           <div className="flex items-center gap-0.5">
             {askAi.trigger}
+            {onFillWithAi &&
+              !readOnly &&
+              hasApiKey &&
+              step.elementMeta &&
+              !step.aiPending &&
+              step.descriptionSource !== 'narration' && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        if (fillBusy) return;
+                        onFillWithAi?.(step.id);
+                      }}
+                      aria-disabled={fillBusy}
+                      aria-label={i18n.t('editor.fillWithAi')}
+                      className={`p-1 rounded-md transition-colors aria-disabled:opacity-40 aria-disabled:cursor-not-allowed ${fillBusy ? 'text-accent' : 'text-border hover:text-accent'}`}
+                    >
+                      {fillBusy ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>{i18n.t('editor.fillWithAi')}</TooltipContent>
+                </Tooltip>
+              )}
             {screenshot && (
               <Tooltip>
                 <TooltipTrigger asChild>

@@ -1,5 +1,6 @@
+import type { CustomProviderMap } from '@/core/capture/ai/custom-providers';
 import type { AIApiKeys } from '@/core/capture/ai/keys';
-import type { AIProviderKey } from '@/core/capture/ai/models';
+import type { AIProviderSelection } from '@/core/capture/ai/models';
 import type { VoiceProvider } from '@/core/capture/voice/transcribe';
 import type { BrandLogo } from '@/core/export/branding';
 import type { ExportOptions } from '@/core/export/options';
@@ -37,6 +38,7 @@ export interface Step {
   inputValue?: string;
   descriptionSource?: DescriptionSource;
   aiPending?: boolean;
+  domContext?: string;
   blockType?: BlockType;
   calloutVariant?: CalloutVariant;
   calloutColor?: string;
@@ -65,9 +67,10 @@ export interface Screenshot {
 export interface Settings {
   aiApiKey: string;
   aiApiKeys: AIApiKeys;
-  aiProvider: AIProviderKey;
+  aiProvider: AIProviderSelection;
   aiModel: string;
   aiBaseUrl: string;
+  aiCustomProviders: CustomProviderMap;
   aiLanguage: string;
   voiceEnabled: boolean;
   voiceProvider: VoiceProvider;

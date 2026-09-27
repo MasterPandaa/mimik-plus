@@ -29,6 +29,7 @@ export interface PanelAiUpdate {
   reason: AiFailureReason;
   status?: number;
   provider: string;
+  label?: string;
 }
 
 type PortMessage = PanelStateUpdate | PanelVoiceUpdate | PanelAiUpdate;

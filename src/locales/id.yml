@@ -1,0 +1,597 @@
+meta:
+  locale: id
+
+app:
+  name: Mimik
+  store_title: "Mimik: Panduan & Tutorial Langkah demi Langkah"
+  description: "Rekam alur kerja browser apa pun sebagai panduan langkah demi langkah. Edit, beri narasi suara, ekspor ke video, PDF, atau DOCX. Lokal-first, open source."
+
+common:
+  loading: Memuat...
+  cancel: Batal
+  save: Simpan
+  delete: Hapus
+  back: Kembali
+  continue: Lanjutkan
+  skip: Lewati
+  export: Ekspor
+  close: Tutup
+  undo: Urungkan
+  star: Bintangi
+  unstar: Hapus Bintang
+  restore: Pulihkan
+  updated: "Diperbarui ke v$1"
+  whatsNew: Lihat yang baru
+
+sidepanel:
+  connected: Terhubung
+  connecting: Menghubungkan...
+  heroTitle: Apa yang ingin direkam?
+  heroSubtitle: Rekam alur kerja apa pun secara otomatis
+  startCapture: Mulai Rekam
+  searchPlaceholder: Cari panduan...
+  recentLabel: Terbaru
+  notRecordable: Buka sebuah situs web untuk mulai merekam
+
+library:
+  noGuidesTitle: Belum ada panduan
+  noGuidesSub: Mulai rekam untuk membuat panduan pertama Anda
+  noStarredTitle: Belum ada panduan berbintang
+  noStarredSub: Tandai bintang agar mudah ditemukan
+  trashEmptyTitle: Tong sampah kosong
+  trashEmptySub: Bersih sekali!
+  noMatchingGuides: Tidak ada panduan yang cocok
+  moveToTrash: Pindahkan ke tong sampah
+  deletePermanently: Hapus permanen
+  openInFullView: Buka di tampilan penuh
+
+guideme:
+  live: Langsung
+  roadblock: "Kami menemui jalan buntu. Coba lakukan tindakan di layar untuk melanjutkan."
+  manualStep: "Langkah ini pernah diedit, jadi tidak bisa dideteksi otomatis. Gunakan Berikutnya setelah Anda melakukannya."
+  stepOf: "Langkah $1 dari $2"
+  noDescription: Tidak ada deskripsi
+  prev: Sebelumnya
+  next: Berikutnya
+  finish: "Selesai"
+  exitTitle: Mau keluar?
+  exitMessage: Panduan Anda akan berhenti dan overlay halaman akan dihapus.
+  stay: Tetap di sini
+  exit: Keluar
+  guideNotFound: Panduan tidak ditemukan
+
+guidemeCompletion:
+  title: "Semua selesai, hebat!"
+  stepsCompleted: "Semua $1 langkah selesai."
+  stepsCompletedPlural: "Semua $1 langkah selesai."
+  allDone: Semua Selesai
+  runAgain: Jalankan Lagi
+
+recording:
+  capturePaused: Perekaman dijeda
+  recording: "Merekam \xB7 $1 langkah"
+  recordingPlural: "Merekam \xB7 $1 langkah"
+  readyTitle: Siap merekam!
+  readySub: Klik di halaman untuk mulai
+  finishRecording: Selesai Merekam
+  smartBlur: Blur Pintar
+  discard: Buang
+  deleteStep: Hapus langkah
+  justNow: Baru saja
+  secondsAgo: "$1 dtk lalu"
+  minutesAgo: "$1 mnt lalu"
+
+settings:
+  title: Pengaturan
+  aiDescriptions: Deskripsi AI
+  provider: Penyedia
+  model: Model
+  modelCustom: Model khusus
+  baseUrl: URL dasar
+  useOwnServer: Gunakan server saya sendiri
+  ownServerHintOpenai: "Kompatibel dengan Ollama, LM Studio, vLLM, atau server apa pun yang kompatibel dengan OpenAI."
+  ownServerHintAnthropic: "Kompatibel dengan proxy LiteLLM atau server apa pun yang kompatibel dengan Anthropic."
+  apiKey: Kunci API
+  showKey: Tampilkan kunci
+  hideKey: Sembunyikan kunci
+  aiLanguage: Bahasa Deskripsi
+  voiceNarration: Narasi Suara
+  voiceUsingAiKey: "Tidak ada kunci suara, jadi Mimik memakai kunci OpenAI dari Deskripsi AI di atas."
+  aiNoKey: "Tidak ada kunci API, jadi langkah-langkah memakai deskripsi berbasis aturan sederhana."
+  voiceNoKey: "Tidak ada kunci API, jadi rekaman Anda tidak akan dinarasi."
+  microphone: Mikrofon
+  microphoneDefault: Default sistem
+  microphoneNeedsAccess: Izinkan akses mikrofon untuk melihat nama perangkat Anda.
+  microphoneGrantAccess: Izinkan akses mikrofon
+  microphoneNone: Tidak ada mikrofon yang ditemukan. Colokkan satu dan akan muncul di sini.
+  microphoneUnavailable: Mikrofon tidak tersedia
+  microphoneMissing: Mikrofon yang Anda pilih sedang tidak tersedia, jadi Mimik memakai default sistem.
+  microphoneTest: Uji mikrofon
+  microphoneStatusAllowed: Diizinkan
+  microphoneStatusBlocked: Diblokir
+  microphoneStatusPending: Belum diizinkan
+  microphoneBlocked: Browser Anda memblokir mikrofon untuk Mimik. Buka pengaturan situs dari ikon di kiri bilah alamat dan atur Mikrofon ke Izinkan.
+  microphoneUnblockHow: Bagaimana cara membukanya?
+  microphoneTestStop: Hentikan uji
+  microphoneTestFailed: Mikrofon itu tidak bisa dibuka. Pilih yang lain dan coba lagi.
+  targetColor: "Warna merek"
+  targetColorHint: "Sorotan klik dan aksen ekspor"
+  branding: "Branding Ekspor"
+  brandLogo: "Logo"
+  uploadLogo: "Unggah logo"
+  replaceLogo: "Ganti"
+  removeLogo: "Hapus logo"
+  footerLine: "Baris footer"
+  footerLinePlaceholder: "mis. Rahasia — hanya untuk internal"
+  footerPresetConfidential: "Rahasia — hanya untuk internal"
+  footerPresetNoDistribute: "Jangan disebarkan"
+  attribution: 'Tampilkan "Dibuat dengan Mimik"'
+  saveSettings: Simpan Pengaturan
+  saved: Tersimpan
+  validatingKey: "Memeriksa kunci\u2026"
+  keyValid: Kunci API terverifikasi.
+  keyInvalid: Kunci API itu ditolak. Periksa dan coba lagi.
+  keyModelRequired: Pilih model sebelum memeriksa kunci ini.
+  keyModelInvalid: Model yang dipilih tidak tersedia dari penyedia ini.
+  checkKey: Periksa kunci
+  keyCannotSpend: "Kunci ini tidak punya kredit, jadi hanya model gratis yang bisa dipakai."
+  keyUnreachable: Tidak bisa menghubungi penyedia. Periksa koneksi Anda dan coba lagi.
+  modelsFound: "$1 model tersedia"
+  smartBlur: Blur Pintar
+  privacyNotice: "Kunci dan audio Anda hanya dikirim ke penyedia yang Anda pilih. Tidak ada hal lain yang meninggalkan browser Anda."
+  bugReport: "Menemukan bug? Laporkan di GitHub"
+  starCtaTitle: "Suka dengan yang Anda lihat?"
+  starCtaMessage: Bintang GitHub membantu orang lain menemukan Mimik dan membuat kami semangat!
+  starOnGithub: Bintang di GitHub
+  customProviders: Penyedia khusus
+  customProvidersHint: "Hubungkan API apa pun yang kompatibel dengan OpenAI, gaya opencode: URL dasar, model, dan header milik Anda sendiri."
+  noCustomProviders: "Belum ada penyedia khusus."
+  addProvider: Tambah penyedia
+  addCustomProvider: "Tambah penyedia khusus…"
+  editProvider: Edit penyedia
+  useProvider: Gunakan
+  inUse: Dipakai
+  providerId: ID Penyedia
+  providerIdHint: "Huruf kecil, angka, tanda hubung, atau garis bawah."
+  providerModelCount: "$1 model"
+  displayName: Nama tampilan
+  apiKeyOptionalHint: "Opsional. Biarkan kosong jika autentikasi dikelola lewat header."
+  models: Model
+  modelId: ID Model
+  modelName: Nama tampilan
+  addModel: Tambah model
+  headers: Header
+  headerName: Nama header
+  headerValue: Nilai
+  addHeader: Tambah header
+  deleteProviderConfirm: 'Hapus penyedia "$1"?'
+  providerIdRequired: "ID Penyedia wajib diisi."
+  providerIdInvalid: "Gunakan hanya huruf kecil, angka, tanda hubung, atau garis bawah."
+  providerIdTaken: "ID penyedia ini sudah dipakai."
+  providerBaseUrlRequired: "URL dasar wajib diisi."
+  providerBaseUrlInvalid: "Masukkan URL http(s) yang valid."
+  providerModelsRequired: "Tambahkan setidaknya satu model."
+  providerBaseUrlManaged: "URL dasar dikelola di Penyedia khusus di bawah."
+
+blurPresets:
+  email: Email
+  phoneNumbers: Nomor Telepon
+  ssn: SSN
+  creditCard: Kartu Kredit
+  ipAddress: Alamat IP
+  macAddress: Alamat MAC
+
+fullview:
+  allGuides: Semua Panduan
+  starred: Berbintang
+  trash: Tong Sampah
+  searchPlaceholder: Cari panduan...
+  guideMe: Pandu Saya
+  untitledGuide: Panduan Tanpa Judul
+  writingTitle: Menulis judul dari langkah yang terekam...
+  writingDescription: "Menulis deskripsi\u2026"
+  guideNotFound: "Panduan tidak ditemukan."
+  stepCount: "$1 langkah"
+  stepCountPlural: "$1 langkah"
+  pageOf: "$1 / $2"
+
+sort:
+  recentFirst: Terbaru dulu
+  oldestFirst: Terlama dulu
+  alphaAZ: "A \u2014 Z"
+  mostSteps: Paling banyak langkah
+  gridView: Tampilan kisi
+  listView: Tampilan daftar
+
+search:
+  startTyping: Mulai mengetik untuk mencari panduan
+  noMatchingGuides: Tidak ada panduan yang cocok
+  noGuidesYet: Belum ada panduan
+
+keyboard:
+  navigate: navigasi
+  open: buka
+  close: tutup
+
+confirmDelete:
+  title: "Hapus panduan?"
+  message: Panduan ini akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.
+  confirm: Hapus permanen
+
+editor:
+  backToLibrary: Kembali ke pustaka
+  openInDashboard: Buka
+  openInDashboardHint: Buka di dasbor untuk mengedit atau mengekspor
+  guideMe: Pandu Saya
+  guideMeUnavailable: Tidak ada langkah yang bisa diputar ulang di panduan ini
+  deleteThisStep: "Hapus langkah ini?"
+  selectStep: Pilih langkah
+  selectedCount: "$1 dipilih"
+  deleteSelectedStep: "Hapus $1 langkah terpilih?"
+  deleteSelectedSteps: "Hapus $1 langkah terpilih?"
+  copyScreenshot: Salin tangkapan layar
+  noScreenshot: Tidak ada tangkapan layar
+  edit: Edit
+  done: Selesai
+  versionHistory: Riwayat versi
+  moreActions: Tindakan lainnya
+  generateDescription: Buat deskripsi
+  regenerateDescription: Buat ulang deskripsi
+  generatingDescription: "Menyusun\u2026"
+  descriptionPlaceholder: Tambahkan deskripsi
+  descriptionErrorNoApiKey: Tambahkan kunci API AI di pengaturan untuk membuat deskripsi.
+  descriptionErrorNoSteps: Panduan ini tidak punya langkah berdeskripsi untuk diringkas.
+  descriptionErrorFailed: Tidak bisa membuat deskripsi. Coba lagi.
+  descriptionErrorSaveFailed: Deskripsi berhasil dibuat tetapi tidak bisa disimpan. Coba lagi.
+  writingStepDescription: "Menulis deskripsi\u2026"
+  transcribingStepDescription: "Menyalin apa yang Anda ucapkan…"
+  rewriteAskAi: Tanya AI
+  rewritePlaceholder: "Beri tahu AI cara mengedit teks ini\u2026"
+  rewriteEnter: Enter
+  rewriteShorter: Lebih singkat
+  rewriteDetail: Lebih detail
+  rewriteGrammar: Perbaiki tata bahasa
+  rewriteFormal: Lebih formal
+  rewriteCasual: Lebih santai
+  rewriteReplace: Ganti
+  rewriteDiscard: Buang
+  rewriteErrorNoApiKey: Tambahkan kunci API AI di pengaturan untuk mengedit teks.
+  rewriteErrorFailed: Tidak bisa mengedit teks yang dipilih. Coba lagi.
+  rewriteErrorStale: Teksnya berubah. Pilih lagi.
+  fillWithAi: Isi dengan AI
+  fillAllWithAi: Isi semua dengan AI
+  regenerateTitle: Buat ulang judul
+  fillStepsDone: "$1 deskripsi dibuat"
+  fillStepsNone: Tidak ada step yang perlu diisi AI.
+  fillStepsError: Gagal membuat deskripsi. Coba lagi.
+
+capture:
+  recordSteps: Rekam langkah
+  moreStepsTitle: Rekam lebih banyak langkah
+  moreStepsBody: Langkah baru disisipkan di sini. Pilih tab untuk merekam.
+  startCapture: Mulai rekam
+  noRecordableTabs: Tidak ada tab yang bisa direkam di jendela ini.
+
+blocks:
+  add: Tambah blok
+  heading: Judul
+  callout: Catatan
+  headingPlaceholder: Judul bagian
+  calloutPlaceholder: Tulis catatan
+  deleteHeading: "Hapus judul ini?"
+  deleteCallout: "Hapus catatan ini?"
+  variantInfo: Info
+  variantWarning: Peringatan
+  variantError: Galat
+  variantSuccess: Sukses
+  variantCustom: Khusus
+
+history:
+  title: Riwayat Versi
+  current: Saat ini
+  restore: Pulihkan
+  unchangedVersions: "Versi tak berubah ($1)"
+  readOnlyBanner: "Anda sedang melihat versi sebelumnya. Tutup Riwayat Versi untuk kembali ke panduan saat ini."
+  loadError: Tidak bisa memuat riwayat versi. Coba lagi.
+  restoreError: Tidak bisa memulihkan. Coba lagi sebentar lagi.
+  storageFull: Penyimpanan tidak cukup untuk titik undo. Hapus sebuah panduan lalu coba lagi.
+  empty: Belum ada versi sebelumnya. Versi muncul di sini setelah Anda mengedit panduan ini.
+  nameVersion: Beri nama versi ini
+  namePlaceholder: Nama versi
+  allVersions: Semua versi
+  namedOnly: Hanya versi bernama
+  emptyNamed: Belum ada versi bernama. Beri nama agar mudah dicari nanti.
+  renameError: Tidak bisa menyimpan nama itu. Coba lagi.
+  changeTitle: Judul diubah
+  changeStepAdded: "$1 langkah ditambahkan"
+  changeStepsAdded: "$1 langkah ditambahkan"
+  changeStepRemoved: "$1 langkah dihapus"
+  changeStepsRemoved: "$1 langkah dihapus"
+  changeStepEdited: "$1 langkah diedit"
+  changeStepsEdited: "$1 langkah diedit"
+  changeStepReordered: Langkah diurutkan ulang
+  changeLink: "$1 tautan berubah"
+  changeLinks: "$1 tautan berubah"
+  changeImageReplaced: "$1 gambar diganti"
+  changeImagesReplaced: "$1 gambar diganti"
+  changeImageCropped: "$1 gambar dipotong"
+  changeImagesCropped: "$1 gambar dipotong"
+  changeImageAnnotated: "$1 gambar dianotasi"
+  changeImagesAnnotated: "$1 gambar dianotasi"
+  changeImageBlurred: "$1 gambar diblur"
+  changeImagesBlurred: "$1 gambar diblur"
+  changeAltText: Teks alternatif diedit
+
+emptyGuide:
+  title: Panduan ini kosong
+  subtitle: Bangunkan dengan merekam beberapa langkah
+
+blurPanel:
+  title: Blur Pintar
+  manualMode: Mode Manual
+  selectElements: Pilih elemen yang ingin diblur
+  done: Selesai
+  doneResume: "Selesai \xB7 Lanjutkan Merekam"
+  resetAll: Reset Semua
+
+screenshotView:
+  zoomIn: Perbesar
+  zoomOut: Perkecil
+  saved: Tersimpan
+  editMenu: Edit tangkapan layar
+  downloadEdited: "Gambar yang telah diedit"
+  downloadOriginal: "Gambar asli"
+  edit: "Edit"
+  addImage: Tambah gambar
+  replaceImage: Ganti gambar
+  replaceHint: "Pilih gambar baru untuk langkah ini"
+  replaceDrop: "Klik untuk menelusuri atau jatuhkan gambar di sini"
+  replaceFormats: "PNG, JPG, atau WebP"
+  download: Unduh
+  deleteImage: Hapus gambar
+  deleteConfirm: "Hapus tangkapan layar ini? Tindakan ini tidak bisa dibatalkan."
+  imageDeleted: Gambar dihapus
+  altButton: ALT
+  altLabel: Teks alternatif
+  altPlaceholder: Jelaskan gambar ini untuk pembaca layar
+
+annotationEditor:
+  title: Edit tangkapan layar
+  toolBox: Kotak
+  toolArrow: Panah
+  toolText: Teks
+  toolSelect: "Pilih"
+  addTarget: "Tambah target klik"
+  toolRedact: Sensor
+  toolCrop: Potong
+  colorLabel: Warna
+  textPlaceholder: Tulis sesuatu...
+  targetBorder: Gaya garis tepi
+  modeAnnotate: "Anotasi"
+  toolLine: "Garis"
+  duplicate: "Duplikat"
+  toolEllipse: "Elips"
+  lineColor: "Warna garis"
+  fillColor: "Warna isi"
+  lineWidth: "Lebar garis"
+  cornerRadius: "Radius sudut"
+  font: "Font"
+  bold: "Tebal"
+  italic: "Miring"
+  lineHeight: "Tinggi baris"
+  width_none: "Tanpa garis tepi"
+  width_xs: "Sangat kecil"
+  width_sm: "Kecil"
+  width_ms: "Agak kecil"
+  width_md: "Sedang"
+  width_ml: "Agak besar"
+  width_lg: "Besar"
+  width_xl: "Sangat besar"
+  zoom: "Perbesaran"
+  cropHint: "Seret untuk memotong, atau seret sudutnya untuk mengubah ukuran"
+  resetCrop: "Reset potongan"
+  arrowEnd: "Ujung panah"
+  fontSize: "Ukuran font"
+  undo: "Urungkan"
+  redo: "Ulangi"
+  end_none: "Tidak ada"
+  end_bar: "Garis"
+  end_arrow: "Panah"
+  end_arrow_solid: "Panah penuh"
+  end_circle: "Lingkaran"
+  end_circle_solid: "Lingkaran penuh"
+  end_square: "Kotak"
+  end_square_solid: "Kotak penuh"
+  done: Selesai
+
+exportPreview:
+  stepDescriptions: "Keterangan langkah"
+  stepDescriptionsHint: "Cantumkan teks langkah ke setiap bingkai video"
+  resolution: "Kualitas video"
+  gifQuality: "Kualitas GIF"
+  gif_low: "Rendah"
+  gif_medium: "Sedang"
+  gif_high: "Tinggi"
+  res_720p: "720p"
+  res_1080p: "1080p"
+  title: "Pratinjau ekspor"
+  cover: "Halaman sampul"
+  coverHint: "Lembar pertama terpisah berisi judul dan detail"
+  screenshots: "Tangkapan layar"
+  screenshotsHint: "Matikan untuk dokumen teks yang ringkas"
+  stepUrls: "Tautan langkah"
+  stepUrlsHint: "Tampilkan alamat halaman tempat setiap langkah terjadi"
+  imageScale: "Ukuran tangkapan layar"
+  scale_small: "Kecil"
+  scale_medium: "Sedang"
+  scale_large: "Besar"
+  download: "Ekspor $1"
+  rendering: "Memperbarui pratinjau"
+  videoReady: "$1 langkah \xB7 sekitar $2 menit video"
+  videoReadyHint: "Panduan panjang tidak dienkode otomatis. Pratinjau mencakup setiap langkah."
+  videoGenerate: "Buat pratinjau"
+  modeDocument: "Dokumen"
+  modeVideo: "Video"
+  encodingVideo: "Menyandikan pratinjau video"
+  videoFailed: "Pratinjau video tidak bisa dibuat"
+
+videoPlayer:
+  stepCount: "$1 langkah"
+  previousStep: "Langkah sebelumnya"
+  nextStep: "Langkah berikutnya"
+  speed: "Kecepatan pemutaran"
+  play: "Putar"
+  pause: "Jeda"
+  fullscreen: "Layar penuh"
+  exitFullscreen: "Keluar dari layar penuh"
+
+exportMenu:
+  docx: DOCX
+  html: HTML
+  markdown: Markdown
+  pdf: PDF
+  gif: GIF
+  video: Video
+  cancelProgress: "Batal \xB7 $1%"
+
+onboarding:
+  welcomeBadge: Selamat datang
+  welcomeTitle: "Mimik berhasil dipasang!"
+  welcomeMessage: "Dalam beberapa langkah saja, Anda siap merekam alur kerja browser secara otomatis dan membuat panduan langkah demi langkah. Tanpa akun \u2014 semuanya tetap di browser Anda."
+  getStarted: Mulai
+  stepOf: "Langkah $1 dari $2"
+  aiTitle: Deskripsi AI
+  aiMessage: Hubungkan kunci API Anda sendiri untuk mendapatkan deskripsi langkah buatan AI. Ini opsional dan bisa diubah nanti di pengaturan.
+  aiGenerated: Buatan AI
+  aiGeneratedDescription: Deskripsi buatan AI
+  voiceTitle: Bicara, lalu lakukan
+  voiceMessage: Ucapkan apa yang akan Anda lakukan, lalu lakukan. Mimik mencocokkan narasi Anda dengan tindakan yang mengikutinya, jadi urutan lebih penting dari apa pun.
+  voiceRecordHint: Narasi tetap mati sampai Anda menyalakannya. Gunakan tombol mikrofon di panel samping saat merekam, sehingga Anda memilih per panduan.
+  voiceDataNotice: Audio Anda dikirim ke penyedia yang Anda pilih di sini, memakai kunci API Anda sendiri. Tidak ada hal lain di Mimik yang meninggalkan browser Anda.
+  voiceDemoLabel: Cara narasi diterapkan
+  voiceDemoSay: Anda berkata
+  voiceDemoQuote: "Sekarang saya buka pengaturan tagihan"
+  voiceDemoAct: Lalu Anda klik
+  voiceDemoAction: Klik tab Tagihan
+  voiceDemoBadge: Dari suara Anda
+  blurTitle: Blur Pintar
+  blurMessage: Blur informasi sensitif di tangkapan layar secara otomatis. Pilih pola mana yang dideteksi.
+  screenshotPreview: Pratinjau tangkapan layar
+  notEnabled: Tidak diaktifkan
+  categoriesProtected: "$1 kategori terlindungi"
+  pinTitle: Pin Mimik
+  pinMessage: Pin ekstensi ke toolbar Anda untuk akses cepat. Klik ikon puzzle di Chrome, lalu pin Mimik.
+  pinStep1Title: Klik ikon puzzle
+  pinStep1Sub: Di kanan atas toolbar browser Anda
+  pinStep2Title: Cari Mimik
+  pinStep2Sub: Di dropdown ekstensi
+  pinStep3Title: Klik ikon pin
+  pinStep3Sub: Mimik akan muncul di toolbar Anda
+  pinScreenshotAlt: Pin ekstensi Mimik
+  starTitle: Mau memberi bintang?
+  starMessage: "Mimik gratis dan open source. Bintang adalah cara termudah untuk berterima kasih, dan membantu orang lain menemukannya."
+  starAction: Bintang di GitHub
+  starLater: Nanti saja
+  doneTitle: "Anda sudah siap!"
+  doneMessage: "Mimik siap merekam alur kerja Anda. Klik \"Mulai Rekam\" di ekstensi untuk merekam panduan pertama Anda."
+  featureAutoCapture: Rekam otomatis
+  featureAIAssist: Bantuan AI
+  featureVoice: Narasi suara
+  featureAnnotate: Anotasi & sensor
+  featureExports: Ekspor ke mana saja
+  featureSmartBlur: Blur pintar
+  openMimik: Buka Mimik
+
+steps:
+  pressKey: "Tekan $1 di $2"
+  toggleCheckbox: "Alihkan $1"
+  selectRadio: "Pilih $1"
+  toggleSwitch: "Alihkan $1"
+  clickLink: 'Klik tautan "$1"'
+  click: "Klik $1"
+  typeIntoField: "Ketik di bidang $1 $2"
+  typeInto: "Ketik di $1"
+  typeSecret: "Ketik kata sandi"
+  copyFrom: "Salin dari $1"
+  pasteInto: "Tempel ke $1"
+  cutFrom: "Potong dari $1"
+  drag: "Seret $1"
+  navigate: Buka halaman
+  defaultAction: "$1 $2"
+
+export:
+  guideLabel: "PANDUAN"
+  endLabel: "PANDUAN SELESAI"
+  stepsRange: "Langkah $1\u2013$2 dari $3"
+  stepOf: "Langkah $1 dari $2"
+  madeWith: "Dibuat dengan Mimik"
+  created: Dibuat
+  source: Sumber
+  step: Langkah
+  steps: Langkah
+  stepLabel: "Langkah $1"
+  stepsCount: "$1 langkah"
+  createdLabel: "Dibuat $1"
+  sourceLabel: "Sumber: $1"
+
+background:
+  guideOnDomain: "Panduan di $1"
+  newGuide: Panduan Baru
+
+voice:
+  turnOn: Nyalakan narasi suara
+  turnOff: Matikan narasi suara
+  needsApiKey: Tambahkan kunci API transkripsi di Pengaturan untuk menarasi
+  micStarting: Menyalakan mikrofon...
+  micHearing: Mendengar Anda
+  micQuiet: Tidak ada suara
+  nextRecording: Narasi suara aktif dan mulai pada rekaman Anda berikutnya.
+  orderHint: Ucapkan apa yang akan Anda lakukan, lalu lakukan. Ucapan Anda menempel pada tindakan berikutnya.
+  transcribing: Menyalin narasi Anda...
+  transcribingHint: Deskripsi langkah akan diperbarui sendiri setelah ini selesai.
+  narrated: "Narasi ditambahkan ke $1 langkah."
+  narratedPlural: "Narasi ditambahkan ke $1 langkah."
+  narratedNone: Tidak ada narasi yang cocok dengan langkah Anda, jadi deskripsi tidak berubah.
+  guideSafe: Panduan dan tangkapan layar Anda aman. Hanya narasinya yang hilang.
+  openSettings: Buka pengaturan
+  errorPermissionDenied: Akses mikrofon diblokir, jadi tidak ada yang dinarasi.
+  errorNoDevice: Tidak ada mikrofon yang ditemukan, jadi tidak ada yang dinarasi.
+  errorNoAudio: Mikrofon tidak menangkap suara, jadi tidak ada yang bisa ditranskripsi.
+  errorMissingApiKey: Narasi suara butuh penyedia transkripsi dan kunci API.
+  errorStreamEnded: Mikrofon berhenti di tengah jalan, jadi narasi berhenti lebih awal.
+  errorNotRecording: Narasi suara tidak sedang berjalan, jadi tidak ada yang bisa ditranskripsi.
+  errorAlreadyRecording: Narasi suara sudah berjalan, jadi rekaman ini tidak dinarasi.
+  errorUnsupported: Browser ini tidak bisa merekam narasi suara.
+  errorUnknown: Narasi suara berhenti tiba-tiba.
+
+micPermission:
+  title: Izinkan akses mikrofon
+  checkingMessage: Memeriksa apakah Mimik sudah punya akses mikrofon...
+  promptingMessage: Browser Anda meminta izin. Pilih Izinkan agar Mimik bisa merekam narasi Anda saat merekam panduan. Tab ini menutup sendiri.
+  grantedTitle: Mikrofon siap
+  grantedMessage: Mengantar Anda kembali ke pekerjaan Anda.
+  deniedTitle: Akses mikrofon diblokir
+  deniedMessage: Browser Anda memblokir mikrofon untuk Mimik, jadi narasi suara tidak bisa merekam. Buka pengaturan situs dari ikon di kiri bilah alamat, atur Mikrofon ke Izinkan, lalu coba lagi. Merekam panduan tetap berjalan tanpanya.
+  retry: Coba lagi
+  privacy: Audio disimpan di memori hanya saat Anda merekam dan dikirim ke penyedia transkripsi yang Anda atur. Mimik tidak pernah menyimpannya.
+
+aiStatus:
+  rejected: "$1 menolak kunci API Anda."
+  noCredits: "Akun $1 Anda tidak punya kredit."
+  rateLimited: "$1 membatasi seberapa sering Mimik boleh bertanya."
+  modelInvalid: "$1 tidak menyediakan model itu untuk akun Anda."
+  quota: "Permintaan itu terlalu besar untuk model ini."
+  network: "Mimik tidak bisa menghubungi $1."
+  unknown: "$1 menolak permintaan itu."
+  actionCheckKey: "Periksa kunci Anda di Pengaturan."
+  actionAddCredits: "Tambahkan kredit, lalu periksa kunci lagi."
+  actionWait: "Tunggu sebentar sebelum merekam lagi."
+  actionPickModel: "Pilih model lain di Pengaturan."
+  actionConnection: "Periksa koneksi Anda."
+
+stepSource:
+  ai: "AI"
+  voice: "Suara"
+  basic: "Dasar"
+  edited: "Diedit"
+  hint: "Dari mana deskripsi ini berasal"

@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react';
+import { Sparkles, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { i18n } from '#imports';
 import { isBlock, stepNumbers } from '@/core/guides/blocks';
@@ -27,6 +27,9 @@ interface GuideStepListProps {
   onChanged?: () => void;
   hasApiKey?: boolean;
   onInsertRecording?: (guideId: string, insertAtIndex: number, tabId: number) => void;
+  onFillWithAi?: (stepIds: string[]) => void;
+  aiBusySteps?: ReadonlySet<string>;
+  aiBusyAll?: boolean;
 }
 
 export default function GuideStepList({
@@ -41,6 +44,9 @@ export default function GuideStepList({
   onChanged,
   hasApiKey,
   onInsertRecording,
+  onFillWithAi,
+  aiBusySteps,
+  aiBusyAll,
 }: GuideStepListProps) {
   const { scrollToStepId, setActiveStepId, bumpHistoryRefresh } = useFullview((s) => ({
     scrollToStepId: s.scrollToStepId,
@@ -232,6 +238,8 @@ export default function GuideStepList({
                   hasApiKey={hasApiKey}
                   onChanged={onChanged}
                   dragHandleProps={dragHandlers(idx)}
+                  onFillWithAi={onFillWithAi && ((stepId) => onFillWithAi([stepId]))}
+                  fillBusy={aiBusySteps?.has(step.id) ?? false}
                 />
               )}
             </div>
@@ -250,6 +258,17 @@ export default function GuideStepList({
           <span className="text-[12px] font-medium text-foreground">
             {i18n.t('editor.selectedCount', [String(selected.size)])}
           </span>
+          {hasApiKey && onFillWithAi && (aiBusyAll === undefined || !aiBusyAll) && (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={(aiBusySteps?.size ?? 0) > 0}
+              onClick={() => onFillWithAi?.([...selected])}
+            >
+              <Sparkles size={13} />
+              {i18n.t('editor.fillWithAi')}
+            </Button>
+          )}
           <Button variant="ghost" size="sm" onClick={() => setSelected(new Set())}>
             {i18n.t('common.cancel')}
           </Button>

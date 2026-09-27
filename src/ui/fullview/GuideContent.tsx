@@ -98,6 +98,10 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
   const [generating, setGenerating] = useState(false);
   const [hasApiKey, setHasApiKey] = useState(false);
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
+  const [generatingTitle, setGeneratingTitle] = useState(false);
+  const [aiBusySteps, setAiBusySteps] = useState<ReadonlySet<string>>(new Set());
+  const [aiBusyAll, setAiBusyAll] = useState(false);
+  const [stepAiNotice, setStepAiNotice] = useState<string | null>(null);
   const titleRef = useRef('');
   const appliedInitialRef = useRef(false);
   const editingDescriptionRef = useRef(false);
@@ -184,6 +188,72 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
       setGenerating(false);
     }
   }, [guideId]);
+
+  const handleRegenerateTitle = useCallback(async () => {
+    if (!data || data.steps.length === 0) return;
+    setGeneratingTitle(true);
+    setDescriptionError(null);
+    try {
+      const result = await sendMessage('generateGuideTitle', { guideId });
+      if (result.error) {
+        setDescriptionError(
+          result.error === 'no-api-key' || result.error === 'no-steps'
+            ? guideDescriptionErrorMessage(result.error)
+            : guideDescriptionErrorMessage('generation-failed'),
+        );
+        return;
+      }
+      const generated = result.title;
+      if (!generated) return;
+      setTitle(generated);
+      titleRef.current = generated;
+      setGuideTitle(generated);
+      document.title = `${generated} — ${i18n.t('app_name')}`;
+      setData((prev) => (prev ? { ...prev, guide: { ...prev.guide, title: generated } } : prev));
+    } catch {
+      setDescriptionError(guideDescriptionErrorMessage('generation-failed'));
+    } finally {
+      setGeneratingTitle(false);
+    }
+  }, [data, guideId, setGuideTitle]);
+
+  const handleFillSteps = useCallback(
+    async (stepIds: string[]) => {
+      if (!data) return;
+      setStepAiNotice(null);
+      if (stepIds.length > 0) {
+        setAiBusySteps(new Set(stepIds));
+      } else {
+        setAiBusyAll(true);
+      }
+      try {
+        const result = await sendMessage('generateStepDescriptions', {
+          guideId,
+          stepIds: stepIds.length > 0 ? stepIds : undefined,
+        });
+        if ('error' in result) {
+          setStepAiNotice(
+            result.error === 'no-api-key' || result.error === 'no-steps'
+              ? guideDescriptionErrorMessage(result.error)
+              : i18n.t('editor.fillStepsError'),
+          );
+          return;
+        }
+        setStepAiNotice(
+          result.updated > 0
+            ? i18n.t('editor.fillStepsDone', [String(result.updated)])
+            : i18n.t('editor.fillStepsNone'),
+        );
+        if (result.updated > 0) await loadGuide();
+      } catch {
+        setStepAiNotice(i18n.t('editor.fillStepsError'));
+      } finally {
+        setAiBusySteps(new Set());
+        setAiBusyAll(false);
+      }
+    },
+    [data, guideId, loadGuide],
+  );
 
   const handleDescriptionChange = useCallback(async (stepId: string, description: string) => {
     await updateStepDescription(stepId, description, 'manual');
@@ -348,25 +418,50 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
                 </div>
               </div>
             ) : editing && !preview ? (
-              <textarea
-                ref={(el) => {
-                  if (el) {
+              <div className="flex items-start gap-2">
+                <textarea
+                  ref={(el) => {
+                    if (el) {
+                      el.style.height = '0';
+                      el.style.height = `${el.scrollHeight}px`;
+                    }
+                  }}
+                  value={title}
+                  rows={1}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                    setGuideTitle(e.target.value);
+                    const el = e.target;
                     el.style.height = '0';
                     el.style.height = `${el.scrollHeight}px`;
-                  }
-                }}
-                value={title}
-                rows={1}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                  setGuideTitle(e.target.value);
-                  const el = e.target;
-                  el.style.height = '0';
-                  el.style.height = `${el.scrollHeight}px`;
-                }}
-                onBlur={handleTitleBlur}
-                className="text-[32px] font-extrabold bg-transparent border-b-2 border-transparent hover:border-border focus:outline-none focus:border-accent w-full p-0 text-foreground resize-none leading-tight overflow-hidden"
-              />
+                  }}
+                  onBlur={handleTitleBlur}
+                  className="flex-1 min-w-0 text-[32px] font-extrabold bg-transparent border-b-2 border-transparent hover:border-border focus:outline-none focus:border-accent p-0 text-foreground resize-none leading-tight overflow-hidden"
+                />
+                {hasApiKey && viewSteps.length > 0 && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (generatingTitle) return;
+                          void handleRegenerateTitle();
+                        }}
+                        aria-disabled={generatingTitle}
+                        aria-label={i18n.t('editor.regenerateTitle')}
+                        className="shrink-0 mt-1.5 p-1 rounded-md text-muted-foreground hover:text-accent hover:bg-secondary transition-colors aria-disabled:cursor-not-allowed aria-disabled:hover:text-muted-foreground aria-disabled:hover:bg-transparent"
+                      >
+                        {generatingTitle ? (
+                          <Loader2 size={15} className="animate-spin text-accent" />
+                        ) : (
+                          <Sparkles size={15} />
+                        )}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>{i18n.t('editor.regenerateTitle')}</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
             ) : (
               <h1 className="text-[32px] font-extrabold leading-tight text-foreground whitespace-pre-wrap break-words">
                 {preview ? preview.title : title}
@@ -446,6 +541,8 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
             </div>
           )}
 
+          <Toast message={stepAiNotice} onDismiss={() => setStepAiNotice(null)} />
+
           <div className="flex items-center gap-1.5 mt-2 mb-4 flex-wrap">
             <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground bg-card border border-border px-2.5 py-0.5 rounded-full">
               {formatDate(data.guide.createdAt)}
@@ -460,6 +557,19 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
                 <FaviconImg domain={domain} size={14} className="rounded-full" />
                 {domain}
               </span>
+            )}
+            {editing && !preview && hasApiKey && viewSteps.length > 0 && (
+              <button
+                onClick={() => {
+                  if (aiBusyAll) return;
+                  void handleFillSteps([]);
+                }}
+                disabled={aiBusyAll}
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3 py-0.5 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed ml-auto"
+              >
+                {aiBusyAll ? <Loader2 size={11} className="animate-spin" /> : <Sparkles size={11} />}
+                {i18n.t('editor.fillAllWithAi')}
+              </button>
             )}
             {!editing && !preview && viewSteps.length > 0 && (
               <button
@@ -487,6 +597,9 @@ export default function GuideContent({ guideId, initialStepId, initialTool }: Gu
             readOnly={!editing || preview !== null}
             hasApiKey={hasApiKey}
             onChanged={loadGuide}
+            onFillWithAi={handleFillSteps}
+            aiBusySteps={aiBusySteps}
+            aiBusyAll={aiBusyAll}
             onInsertRecording={(targetGuideId, insertAtIndex, tabId) => {
               openSidebar();
               void startInsertRecording(targetGuideId, insertAtIndex, tabId);

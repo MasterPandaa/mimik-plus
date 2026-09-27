@@ -134,6 +134,35 @@ settings:
   starCtaTitle: "Gefällt dir, was du siehst?"
   starCtaMessage: Ein Stern auf GitHub hilft anderen, Mimik zu finden, und hält uns motiviert!
   starOnGithub: Auf GitHub favorisieren
+  customProviders: "Benutzerdefinierte Anbieter"
+  customProvidersHint: "Verbinde eine beliebige OpenAI-kompatible API im opencode-Stil: eigene Basis-URL, Modelle und Header."
+  noCustomProviders: "Noch keine benutzerdefinierten Anbieter."
+  addProvider: "Anbieter hinzufügen"
+  addCustomProvider: "Benutzerdefinierten Anbieter hinzufügen …"
+  editProvider: "Anbieter bearbeiten"
+  useProvider: Verwenden
+  inUse: "In Verwendung"
+  providerId: "Anbieter-ID"
+  providerIdHint: "Kleinbuchstaben, Zahlen, Bindestriche oder Unterstriche."
+  providerModelCount: "$1 Modelle"
+  displayName: Anzeigename
+  apiKeyOptionalHint: "Optional. Leer lassen, wenn die Authentifizierung über Header erfolgt."
+  models: Modelle
+  modelId: "Modell-ID"
+  modelName: Anzeigename
+  addModel: "Modell hinzufügen"
+  headers: Header
+  headerName: "Header-Name"
+  headerValue: Wert
+  addHeader: "Header hinzufügen"
+  deleteProviderConfirm: 'Anbieter "$1" löschen?'
+  providerIdRequired: "Anbieter-ID ist erforderlich."
+  providerIdInvalid: "Nur Kleinbuchstaben, Zahlen, Bindestriche oder Unterstriche verwenden."
+  providerIdTaken: "Diese Anbieter-ID wird bereits verwendet."
+  providerBaseUrlRequired: "Basis-URL ist erforderlich."
+  providerBaseUrlInvalid: "Eine gültige http(s)-URL eingeben."
+  providerModelsRequired: "Mindestens ein Modell hinzufügen."
+  providerBaseUrlManaged: "Die Basis-URL wird unten unter benutzerdefinierten Anbietern verwaltet."
   validatingKey: "Schlüssel wird geprüft…"
   keyValid: API-Schlüssel bestätigt.
   keyInvalid: Dieser API-Schlüssel wurde abgelehnt. Prüfe ihn und versuche es erneut.
@@ -219,6 +248,12 @@ editor:
   rewriteErrorNoApiKey: Füge in den Einstellungen einen KI-API-Schlüssel hinzu, um Text umzuschreiben.
   rewriteErrorFailed: Die Auswahl konnte nicht umgeschrieben werden. Versuche es erneut.
   rewriteErrorStale: Der Text hat sich geändert. Wähle ihn erneut aus.
+  fillWithAi: Mit KI ausfüllen
+  fillAllWithAi: Alle mit KI ausfüllen
+  regenerateTitle: Titel neu erstellen
+  fillStepsDone: "$1 Beschreibungen erstellt"
+  fillStepsNone: Keine Schritte benötigen eine KI-Beschreibung.
+  fillStepsError: Beschreibungen konnten nicht erstellt werden. Versuche es erneut.
   generateDescription: Beschreibung erstellen
   regenerateDescription: Beschreibung neu erstellen
   generatingDescription: "Wird erstellt…"

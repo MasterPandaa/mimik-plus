@@ -29,6 +29,7 @@ pnpm install
 ```bash
 pnpm dev                   # Chrome (MV3) with HMR
 pnpm dev:firefox           # Firefox (MV3) with HMR
+pnpm dev:opera             # Opera (MV3) with HMR
 ```
 
 WXT launches a fresh browser instance with the extension loaded.
@@ -38,7 +39,8 @@ WXT launches a fresh browser instance with the extension loaded.
 ```bash
 pnpm build                 # Chrome → .output/chrome-mv3/
 pnpm build:firefox         # Firefox → .output/firefox-mv3/
-pnpm zip:all               # package both browsers
+pnpm build:opera           # Opera → .output/opera-mv3/
+pnpm zip:all               # package all browsers
 ```
 
 ### Test

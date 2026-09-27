@@ -4,6 +4,7 @@ import {
   type AIProviderConfig,
   findProvider,
   isCustomBaseUrl,
+  isCustomProviderSelection,
   normalizeBaseUrl,
   resolveBaseUrl,
 } from './models';
@@ -24,6 +25,21 @@ const PROTOCOL_HEADERS: Record<AIProtocol, (key: string) => Record<string, strin
     'anthropic-dangerous-direct-browser-access': 'true',
   }),
 };
+
+/** Merges protocol auth (skipped when the key is empty) with user-defined headers, which win. */
+export function buildRequestHeaders(
+  protocol: AIProtocol,
+  apiKey: string,
+  extra?: Record<string, string>,
+): Record<string, string> {
+  const headers = apiKey.trim() ? PROTOCOL_HEADERS[protocol](apiKey) : {};
+  if (!extra) return headers;
+  const cleaned: Record<string, string> = {};
+  for (const [name, value] of Object.entries(extra)) {
+    if (name.trim() && value.trim()) cleaned[name] = value;
+  }
+  return { ...headers, ...cleaned };
+}
 
 const VOICE_ENDPOINTS: Record<string, { url: string; headers: (key: string) => Record<string, string> }> = {
   groq: {
@@ -120,8 +136,9 @@ async function validateCustomServer(
   apiKey: string,
   baseUrl: string,
   model?: string,
+  extraHeaders?: Record<string, string>,
 ): Promise<KeyValidation> {
-  const headers = PROTOCOL_HEADERS[config.protocol](apiKey);
+  const headers = buildRequestHeaders(config.protocol, apiKey, extraHeaders);
   const base = normalizeBaseUrl(baseUrl);
   const catalogUrl = `${base}/models`;
 
@@ -146,10 +163,28 @@ export async function validateApiKey(
   apiKey: string,
   baseUrl?: string,
   model?: string,
+  extraHeaders?: Record<string, string>,
 ): Promise<KeyValidation> {
   const config = findProvider(provider);
 
   if (!config) {
+    if (isCustomProviderSelection(provider)) {
+      if (!baseUrl?.trim()) return { valid: false, reason: 'network' };
+      return validateCustomServer(
+        {
+          label: provider,
+          protocol: 'openai',
+          transport: 'chat',
+          defaultBaseUrl: baseUrl.trim(),
+          defaultModel: model?.trim() || '',
+          models: [],
+        },
+        apiKey,
+        baseUrl,
+        model,
+        extraHeaders,
+      );
+    }
     const endpoint = VOICE_ENDPOINTS[provider];
     if (!endpoint) {
       logger.error('No API key validation endpoint for provider', provider);

@@ -2,13 +2,15 @@
 
 <img src="public/mascot.svg" width="140" height="140" alt="Mimik 吉祥物" />
 
-# Mimik
+# Mimik Plus
 
-[English](./README.md) · [Español](./README.es.md) · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · **简体中文**
+[English](./README.md) · [Español](./README.es.md) · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · **简体中文** · [Bahasa Indonesia](./README.id.md)
 
 **自动捕获任何浏览器工作流，并生成分步指南。无需账号，没有云端，也不做追踪。**
 
 点击录制，完成你的操作，Mimik 会生成一份带标注截图的精美指南。你可以边录边讲解，录完后编辑，然后 replay 或导出。
+
+> **这是 [Mimik](https://github.com/westpoint-io/mimik)（由 Westpoint 创建）的社区 fork**，增加了自定义 AI 提供商支持、Bahasa Indonesia 语言等功能。所有原始功劳属于 Westpoint 团队。
 
 <!-- SHIELD GROUP -->
 

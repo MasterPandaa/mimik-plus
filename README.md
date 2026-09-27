@@ -2,13 +2,15 @@
 
 <img src="public/mascot.svg" width="140" height="140" alt="Mimik mascot" />
 
-# Mimik
+# Mimik Plus
 
-**English** · [Español](./README.es.md) · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md)
+**English** · [Español](./README.es.md) · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md) · [Bahasa Indonesia](./README.id.md)
 
 **Auto-capture any browser workflow into a step-by-step guide. No account, no cloud, no tracking.**
 
 Click record, do the thing, get a polished guide with annotated screenshots. Narrate it as you go, edit it after, then replay or export.
+
+> **This is a community fork of [Mimik](https://github.com/westpoint-io/mimik) by Westpoint**, enhanced with additional features including custom AI provider support, Indonesian language (Bahasa Indonesia), and other improvements. All original credit goes to the Westpoint team.
 
 <!-- SHIELD GROUP -->
 
@@ -21,6 +23,7 @@ Click record, do the thing, get a polished guide with annotated screenshots. Nar
 [![Contributors][contributors-shield]][contributors-link]
 ![Last Commit][last-commit-shield]
 [![Issues][issues-shield]][issues-link]
+[![Forked From][fork-shield]][fork-link]
 
 </div>
 
@@ -34,10 +37,13 @@ Click record, do the thing, get a polished guide with annotated screenshots. Nar
 - [✨ Features](#-features)
   - [🔒 Smart Blur](#-smart-blur)
   - [🧠 AI descriptions (optional)](#-ai-descriptions-optional)
+  - [🔌 Custom AI Providers (new!)](#-custom-ai-providers-new)
   - [▶️ Guide Me replay](#️-guide-me-replay)
   - [🎙️ Voice narration (optional)](#️-voice-narration-optional)
   - [✏️ Guide editor](#️-guide-editor)
   - [📤 Multi-format export](#-multi-format-export)
+  - [🌐 Indonesian Language Support (new!)](#-indonesian-language-support-new)
+- [🆕 What's New in This Fork](#-whats-new-in-this-fork)
 - [🔐 Privacy & storage](#-privacy--storage)
 - [🤝 Contributing](#-contributing)
 - [⭐ Star History](#-star-history)
@@ -69,14 +75,14 @@ Each step gets a screenshot with the clicked element highlighted and zoomed in. 
 | Firefox | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
 | Edge    | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
 
-Available in English, Spanish, Brazilian Portuguese, French, German, and Simplified Chinese. The AI description language is set separately, so you can run Mimik in English and generate guides in Spanish, or any combination.
+Available in English, Spanish, Brazilian Portuguese, French, German, Simplified Chinese, and now **Bahasa Indonesia**. The AI description language is set separately, so you can run Mimik in English and generate guides in any supported language.
 
 > \[!IMPORTANT]
 >
-> **⭐️ Star the repo** if Mimik saves you time. It helps other people discover it!
+> **⭐️ Star the repo** if Mimik Plus saves you time. It helps other people discover it!
 
-<a href="https://github.com/westpoint-io/mimik">
-  <img width="100%" alt="Star Mimik on GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
+<a href="https://github.com/MasterPandaa/mimik-plus">
+  <img width="100%" alt="Star Mimik Plus on GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
 </a>
 
 <div align="right">
@@ -105,9 +111,36 @@ Need to blur something custom? The manual blur picker lets you select any DOM el
 
 Bring your own API key (OpenAI or Anthropic) and Mimik generates human-readable step descriptions like *"Click the **Submit** button to save changes"* instead of the rule-based `Click Submit`.
 
-Descriptions are generated from a lightweight DOM context (~50-100 tokens), not screenshots. Roughly 15-30x cheaper than vision models. Choose the language you want descriptions in (English, Spanish, Portuguese, French, German, Chinese).
+Descriptions are generated from a lightweight DOM context (~50-100 tokens), not screenshots. Roughly 15-30x cheaper than vision models. Choose the language you want descriptions in (English, Spanish, Portuguese, French, German, Chinese, Indonesian).
 
 <img src="https://github.com/user-attachments/assets/3540cbd5-133f-46fd-a9b6-ffce9b4d422a" alt="AI descriptions" width="800" />
+
+<div align="right">
+
+[![Back to top][back-to-top]](#readme-top)
+
+</div>
+
+### 🔌 Custom AI Providers (new!)
+
+Beyond OpenAI and Anthropic, you can now connect **any OpenAI-compatible API** as a custom AI provider. This includes self-hosted models via Ollama, LM Studio, vLLM, or any other OpenAI-compatible endpoint — as well as third-party providers like Together AI, Groq, or your own company's API gateway.
+
+**How to use:**
+1. Open **Settings** in the Mimik side panel
+2. Scroll to the **Custom Providers** section
+3. Click **Add provider**
+4. Fill in:
+   - **Provider ID**: A unique identifier (lowercase letters, numbers, hyphens, underscores — e.g., `my-ollama`)
+   - **Display Name**: A friendly name shown in the UI
+   - **Base URL**: The API endpoint (e.g., `http://localhost:11434/v1` for Ollama)
+   - **API Key**: Optional — leave blank if authentication is managed via headers
+   - **Models**: Add one or more model IDs (e.g., `llama3.2`, `mistral`)
+   - **Headers**: Optional custom headers for authentication or routing
+5. Click **Save**, then select the new provider from the AI provider dropdown
+6. Use **Check Key** to verify the connection before recording
+
+> [!TIP]
+> For Ollama running locally, set Base URL to `http://localhost:11434/v1` and add your model names (e.g., `llama3.2`). No API key required — Ollama doesn't need one.
 
 <div align="right">
 
@@ -147,6 +180,8 @@ Fix a guide after the fact without re-recording. Crop, annotate and redact any s
 step with AI inline, drop headings and notes between steps, reorder or bulk-delete, and roll back
 through version history.
 
+Each step now shows a **source label** indicating where its description came from: `AI`, `Voice`, `Basic` (rule-based), or `Edited` (manually written).
+
 <img src="https://github.com/user-attachments/assets/62d3a01e-b129-44c8-8ba3-e9b97ff08d7e" alt="Guide editor" width="800" />
 
 <div align="right">
@@ -160,6 +195,7 @@ through version history.
 Share guides in whatever format fits your workflow:
 
 - **Video**: narrated walkthrough, mp4/H.264, with the cursor moving to each target
+- **GIF**: animated export, choose Small/Medium/Large quality
 - **PDF**: print-ready, A4 portrait with auto page breaks
 - **DOCX**: open and keep editing in Word
 - **HTML**: self-contained, share anywhere, base64-embedded images
@@ -175,11 +211,44 @@ All exports are generated client-side. Nothing touches a server.
 
 </div>
 
+### 🌐 Indonesian Language Support (new!)
+
+Mimik Plus now includes full support for **Bahasa Indonesia**. The entire interface — sidepanel, guide editor, onboarding wizard, export dialogs, settings, and error messages — is fully translated.
+
+**How to switch to Indonesian:**
+1. Open the extension settings page (click the gear icon in the sidepanel)
+2. Your browser's language preference is detected automatically. If your browser is set to Indonesian (`id`), the UI will display in Bahasa Indonesia
+3. AI-generated step descriptions can also be set to Indonesian — go to **Settings → AI Language → Indonesian**
+
+<div align="right">
+
+[![Back to top][back-to-top]](#readme-top)
+
+</div>
+
+## 🆕 What's New in This Fork
+
+This fork builds on top of Mimik v1.2.0 with the following additions:
+
+| Feature | Description |
+|---------|-------------|
+| 🔌 **Custom AI Providers** | Connect any OpenAI-compatible API — Ollama, LM Studio, vLLM, or any third-party gateway. Set a base URL, model list, API key, and custom headers. |
+| 🌐 **Bahasa Indonesia** | Full UI translation for Indonesian language. All panels, dialogs, error messages, and export labels are localized. |
+| 🏷️ **Step Source Labels** | Each step card now shows where its description came from: AI, Voice, Basic (rule-based), or Edited. |
+| ✅ **Improved API Key Validation** | Better feedback when checking API keys — shows available model lists, spending warnings, and connectivity errors. |
+| 🔐 **Stricter Storage Validation** | Every read/write to IndexedDB is validated against the declared shape, preventing silent data corruption. |
+
+<div align="right">
+
+[![Back to top][back-to-top]](#readme-top)
+
+</div>
+
 ## 🔐 Privacy & storage
 
 Guides, steps, and screenshots live on your device. There's no backend, no account, no telemetry. Your API keys (if you bring one) never leave your browser — they're stored locally and used to call the provider you chose directly.
 
-Two things do leave the browser, both documented in the [privacy policy](https://mimik.westpoint.io/privacy/): site icons are fetched from Google's favicon service, which sends that site's domain, and the optional AI and voice features send text or audio to the provider you configured.
+Two things do leave the browser: site icons are fetched from Google's favicon service, and the optional AI and voice features send text or audio to the provider you configured.
 
 <div align="right">
 
@@ -201,11 +270,11 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, project layout, 
 
 ## ⭐ Star History
 
-<a href="https://www.star-history.com/#westpoint-io/mimik&Timeline">
+<a href="https://www.star-history.com/#MasterPandaa/mimik-plus&Timeline">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=westpoint-io/mimik&type=Timeline&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=westpoint-io/mimik&type=Timeline" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=westpoint-io/mimik&type=Timeline" width="800" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=MasterPandaa/mimik-plus&type=Timeline&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=MasterPandaa/mimik-plus&type=Timeline" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=MasterPandaa/mimik-plus&type=Timeline" width="800" />
   </picture>
 </a>
 
@@ -217,7 +286,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, project layout, 
 
 ## 📜 License
 
-MIT © [Westpoint](https://github.com/westpoint-io). See [LICENSE](./LICENSE) for details.
+MIT © [Westpoint](https://github.com/westpoint-io) (original) · Fork maintained by [MasterPandaa](https://github.com/MasterPandaa). See [LICENSE](./LICENSE) for details.
 
 <div align="right">
 
@@ -236,21 +305,24 @@ MIT © [Westpoint](https://github.com/westpoint-io). See [LICENSE](./LICENSE) fo
 [mv3-link]: https://developer.chrome.com/docs/extensions/mv3/intro/
 
 [local-shield]: https://img.shields.io/badge/storage-100%25%20local-4F46E5?style=flat-square&labelColor=1E1B4B
-[local-link]: #-100-local-storage
+[local-link]: #-privacy--storage
 
 [no-account-shield]: https://img.shields.io/badge/account-not%20required-4F46E5?style=flat-square&labelColor=1E1B4B
-[no-account-link]: #-100-local-storage
+[no-account-link]: #-privacy--storage
 
-[star-shield]: https://img.shields.io/github/stars/westpoint-io/mimik?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
-[star-link]: https://github.com/westpoint-io/mimik/stargazers
+[fork-shield]: https://img.shields.io/badge/fork%20of-westpoint--io%2Fmimik-6366F1?style=flat-square&labelColor=1E1B4B
+[fork-link]: https://github.com/westpoint-io/mimik
 
-[contributors-shield]: https://img.shields.io/github/contributors/westpoint-io/mimik?style=flat-square&labelColor=1E1B4B
-[contributors-link]: https://github.com/westpoint-io/mimik/graphs/contributors
+[star-shield]: https://img.shields.io/github/stars/MasterPandaa/mimik-plus?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
+[star-link]: https://github.com/MasterPandaa/mimik-plus/stargazers
 
-[last-commit-shield]: https://img.shields.io/github/last-commit/westpoint-io/mimik?style=flat-square&label=commit&labelColor=1E1B4B
+[contributors-shield]: https://img.shields.io/github/contributors/MasterPandaa/mimik-plus?style=flat-square&labelColor=1E1B4B
+[contributors-link]: https://github.com/MasterPandaa/mimik-plus/graphs/contributors
 
-[issues-shield]: https://img.shields.io/github/issues/westpoint-io/mimik?style=flat-square&labelColor=1E1B4B
-[issues-link]: https://github.com/westpoint-io/mimik/issues
+[last-commit-shield]: https://img.shields.io/github/last-commit/MasterPandaa/mimik-plus?style=flat-square&label=commit&labelColor=1E1B4B
+
+[issues-shield]: https://img.shields.io/github/issues/MasterPandaa/mimik-plus?style=flat-square&labelColor=1E1B4B
+[issues-link]: https://github.com/MasterPandaa/mimik-plus/issues
 
 [chrome-version-shield]: https://img.shields.io/chrome-web-store/v/jmfohdaflahliammccpiadmkcibohgha?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
 [chrome-link]: https://chromewebstore.google.com/detail/mimik/jmfohdaflahliammccpiadmkcibohgha
@@ -258,5 +330,3 @@ MIT © [Westpoint](https://github.com/westpoint-io). See [LICENSE](./LICENSE) fo
 [firefox-link]: https://addons.mozilla.org/en-US/firefox/addon/mimik/
 [edge-version-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fhgjemhfoffebbollleajkpefblppleai&query=%24.version&label=Edge%20Version&style=flat-square&logo=microsoftedge&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
 [edge-link]: https://microsoftedge.microsoft.com/addons/detail/hgjemhfoffebbollleajkpefblppleai
-</content>
-</invoke>

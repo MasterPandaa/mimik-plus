@@ -143,6 +143,35 @@ settings:
   starCtaTitle: "Vous aimez Mimik ?"
   starCtaMessage: "Une étoile sur GitHub nous aide beaucoup et permet à d'autres de découvrir Mimik !"
   starOnGithub: "Donner une étoile sur GitHub"
+  customProviders: "Fournisseurs personnalisés"
+  customProvidersHint: "Connectez n'importe quelle API compatible OpenAI, façon opencode : votre propre URL de base, modèles et en-têtes."
+  noCustomProviders: "Aucun fournisseur personnalisé pour le moment."
+  addProvider: "Ajouter un fournisseur"
+  addCustomProvider: "Ajouter un fournisseur personnalisé…"
+  editProvider: "Modifier le fournisseur"
+  useProvider: Utiliser
+  inUse: "En cours d'utilisation"
+  providerId: "ID du fournisseur"
+  providerIdHint: "Lettres minuscules, chiffres, traits d'union ou traits de soulignement."
+  providerModelCount: "$1 modèles"
+  displayName: "Nom d'affichage"
+  apiKeyOptionalHint: "Facultatif. Laissez vide si vous gérez l'authentification via les en-têtes."
+  models: "Modèles"
+  modelId: "ID du modèle"
+  modelName: "Nom d'affichage"
+  addModel: "Ajouter un modèle"
+  headers: "En-têtes"
+  headerName: "Nom d'en-tête"
+  headerValue: Valeur
+  addHeader: "Ajouter un en-tête"
+  deleteProviderConfirm: 'Supprimer le fournisseur "$1" ?'
+  providerIdRequired: "L'ID du fournisseur est requis."
+  providerIdInvalid: "Utilisez uniquement des minuscules, chiffres, traits d'union ou traits de soulignement."
+  providerIdTaken: "Cet ID de fournisseur est déjà utilisé."
+  providerBaseUrlRequired: "L'URL de base est requise."
+  providerBaseUrlInvalid: "Saisissez une URL http(s) valide."
+  providerModelsRequired: "Ajoutez au moins un modèle."
+  providerBaseUrlManaged: "L'URL de base est gérée dans Fournisseurs personnalisés ci-dessous."
 
 blurPresets:
   email: "E-mail"
@@ -229,6 +258,12 @@ editor:
   rewriteErrorNoApiKey: "Ajoutez une cl\xE9 d'API d'IA dans les r\xE9glages pour r\xE9\xE9crire du texte."
   rewriteErrorFailed: "Impossible de r\xE9\xE9crire la s\xE9lection. R\xE9essayez."
   rewriteErrorStale: "Le texte a chang\xE9. S\xE9lectionnez-le \xE0 nouveau."
+  fillWithAi: Remplir avec l'IA
+  fillAllWithAi: Tout remplir avec l'IA
+  regenerateTitle: Régénérer le titre
+  fillStepsDone: "$1 descriptions générées"
+  fillStepsNone: Aucune étape ne nécessite de description IA.
+  fillStepsError: Impossible de générer les descriptions. Réessayez.
 
 capture:
   recordSteps: "Enregistrer des étapes"

@@ -11,7 +11,7 @@ interface AiStatusProps {
 export default function AiStatus({ update }: AiStatusProps) {
   if (!update) return null;
 
-  const label = findProvider(update.provider)?.label ?? update.provider;
+  const label = update.label ?? findProvider(update.provider)?.label ?? update.provider;
 
   return (
     <div className="px-4 pt-2.5 flex items-start gap-2" role="status">

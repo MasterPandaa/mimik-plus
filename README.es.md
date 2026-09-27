@@ -2,13 +2,15 @@
 
 <img src="public/mascot.svg" width="140" height="140" alt="Mascota de Mimik" />
 
-# Mimik
+# Mimik Plus
 
-[English](./README.md) · **Español** · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md)
+[English](./README.md) · **Español** · [Português (BR)](./README.pt-BR.md) · [Français](./README.fr.md) · [简体中文](./README.zh-CN.md) · [Bahasa Indonesia](./README.id.md)
 
 **Captura cualquier flujo del navegador y conviértelo en una guía paso a paso. Sin cuenta, sin nube, sin rastreo.**
 
 Le das a grabar, haces lo tuyo, y obtienes una guía pulida con capturas anotadas. Edítala, reprodúcela o expórtala.
+
+> **Este es un fork comunitario de [Mimik](https://github.com/westpoint-io/mimik) por Westpoint**, con características adicionales como soporte de proveedores de IA personalizados, idioma Bahasa Indonesia y otras mejoras. Todo el crédito original pertenece al equipo de Westpoint.
 
 <!-- SHIELD GROUP -->
 
@@ -21,6 +23,7 @@ Le das a grabar, haces lo tuyo, y obtienes una guía pulida con capturas anotada
 [![Contributors][contributors-shield]][contributors-link]
 ![Last Commit][last-commit-shield]
 [![Issues][issues-shield]][issues-link]
+[![Fork de][fork-shield]][fork-link]
 
 </div>
 
@@ -36,8 +39,10 @@ Le das a grabar, haces lo tuyo, y obtienes una guía pulida con capturas anotada
   - [🧠 Descripciones con IA (opcional)](#-descripciones-con-ia-opcional)
   - [▶️ Reproducción Guide Me](#️-reproducción-guide-me)
   - [🎙️ Narración por voz (opcional)](#️-narración-por-voz-opcional)
+  - [🔌 Proveedores de IA personalizados (nuevo!)](#-proveedores-de-ia-personalizados-nuevo)
   - [✏️ Editor de guías](#️-editor-de-guías)
   - [📤 Exportación multi-formato](#-exportación-multi-formato)
+- [🆕 Novedades de este fork](#-novedades-de-este-fork)
 - [🔐 Privacidad y almacenamiento](#-privacidad-y-almacenamiento)
 - [🤝 Contribuir](#-contribuir)
 - [📜 Licencia](#-licencia)
@@ -68,14 +73,14 @@ Cada paso lleva una captura con el elemento pulsado resaltado y ampliado. Sin re
 | Firefox   | [![Firefox Version][firefox-version-shield]][firefox-link] | [Firefox Add-ons][firefox-link]  |
 | Edge      | [![Edge Version][edge-version-shield]][edge-link]          | [Microsoft Edge Add-ons][edge-link] |
 
-Disponible en inglés, español, portugués brasileño, francés, alemán y chino simplificado. El idioma de las descripciones de IA se configura por separado, así que puedes usar Mimik en inglés y generar guías en español, o cualquier combinación.
+Disponible en inglés, español, portugués brasileño, francés, alemán, chino simplificado y ahora **Bahasa Indonesia**. El idioma de las descripciones de IA se configura por separado, así que puedes usar Mimik en inglés y generar guías en español, o cualquier combinación.
 
 > \[!IMPORTANT]
 >
 > **⭐️ Dale una estrella al repo** si Mimik te ahorra tiempo. Ayuda a que otras personas lo descubran.
 
-<a href="https://github.com/westpoint-io/mimik">
-  <img width="100%" alt="Dale una estrella a Mimik en GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
+<a href="https://github.com/MasterPandaa/mimik-plus">
+  <img width="100%" alt="Dale una estrella a Mimik Plus en GitHub" src="https://github.com/user-attachments/assets/80d304da-a765-4bde-bf49-b1bdcb4fe804" />
 </a>
 
 <div align="right">
@@ -140,11 +145,25 @@ corresponde, así narras una vez en lugar de escribir cada paso a mano.
 
 </div>
 
+### 🔌 Proveedores de IA personalizados (nuevo!)
+
+Además de OpenAI y Anthropic, ahora puedes conectar **cualquier API compatible con OpenAI** como proveedor personalizado: Ollama, LM Studio, vLLM, Together AI, Groq o la gateway de tu empresa.
+
+**Cómo usarlo:** Ve a **Configuración → Proveedores personalizados → Agregar proveedor**. Rellena el ID, nombre, URL base, clave API (opcional), modelos y cabeceras.
+
+<div align="right">
+
+[![Back to top][back-to-top]](#readme-top)
+
+</div>
+
 ### ✏️ Editor de guías
 
 Arregla una guía después sin volver a grabar. Recorta, anota y censura cualquier captura, reescribe
 un paso con IA sin salir del editor, mete títulos y notas entre pasos, reordena o borra en lote, y
 vuelve atrás con el historial de versiones.
+
+Cada paso ahora muestra una **etiqueta de origen** que indica de dónde viene su descripción: `IA`, `Voz`, `Básico` (basado en reglas) o `Editado` (escrito manualmente).
 
 <img src="https://github.com/user-attachments/assets/62d3a01e-b129-44c8-8ba3-e9b97ff08d7e" alt="Editor de guías" width="800" />
 
@@ -186,6 +205,24 @@ Dos cosas sí salen del navegador, ambas documentadas en la [política de privac
 
 </div>
 
+## 🆕 Novedades de este fork
+
+Este fork se basa en Mimik v1.2.0 con las siguientes adiciones:
+
+| Característica | Descripción |
+|----------------|-------------|
+| 🔌 **Proveedores de IA personalizados** | Conecta cualquier API compatible con OpenAI — Ollama, LM Studio, vLLM o cualquier gateway de terceros. |
+| 🌐 **Bahasa Indonesia** | Traducción completa de la UI al indonesio. |
+| 🏷️ **Etiquetas de origen de pasos** | Cada tarjeta de paso muestra de dónde viene su descripción: IA, Voz, Básico o Editado. |
+| ✅ **Validación mejorada de clave API** | Mejor retroalimentación al verificar claves API — lista de modelos disponibles y errores de conectividad. |
+| 🔐 **Validación de almacenamiento más estricta** | Cada lectura/escritura en IndexedDB se valida contra el esquema declarado. |
+
+<div align="right">
+
+[![Back to top][back-to-top]](#readme-top)
+
+</div>
+
 ## 🤝 Contribuir
 
 Se agradece todo tipo de contribución: reportes de bugs, ideas nuevas, PRs y traducciones.
@@ -200,7 +237,7 @@ Mira [CONTRIBUTING.md](./CONTRIBUTING.md) para el setup de desarrollo, la estruc
 
 ## 📜 Licencia
 
-MIT © [Westpoint](https://github.com/westpoint-io). Mira [LICENSE](./LICENSE) para los detalles.
+MIT © [Westpoint](https://github.com/westpoint-io) (original) · Fork mantenido por [MasterPandaa](https://github.com/MasterPandaa). Mira [LICENSE](./LICENSE) para los detalles.
 
 <div align="right">
 
@@ -219,21 +256,24 @@ MIT © [Westpoint](https://github.com/westpoint-io). Mira [LICENSE](./LICENSE) p
 [mv3-link]: https://developer.chrome.com/docs/extensions/mv3/intro/
 
 [local-shield]: https://img.shields.io/badge/storage-100%25%20local-4F46E5?style=flat-square&labelColor=1E1B4B
-[local-link]: #-almacenamiento-100-local
+[local-link]: #-privacidad-y-almacenamiento
 
 [no-account-shield]: https://img.shields.io/badge/account-not%20required-4F46E5?style=flat-square&labelColor=1E1B4B
-[no-account-link]: #-almacenamiento-100-local
+[no-account-link]: #-privacidad-y-almacenamiento
 
-[star-shield]: https://img.shields.io/github/stars/westpoint-io/mimik?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
-[star-link]: https://github.com/westpoint-io/mimik/stargazers
+[fork-shield]: https://img.shields.io/badge/fork%20de-westpoint--io%2Fmimik-6366F1?style=flat-square&labelColor=1E1B4B
+[fork-link]: https://github.com/westpoint-io/mimik
 
-[contributors-shield]: https://img.shields.io/github/contributors/westpoint-io/mimik?style=flat-square&labelColor=1E1B4B
-[contributors-link]: https://github.com/westpoint-io/mimik/graphs/contributors
+[star-shield]: https://img.shields.io/github/stars/MasterPandaa/mimik-plus?style=flat-square&label=stars&color=4F46E5&labelColor=1E1B4B
+[star-link]: https://github.com/MasterPandaa/mimik-plus/stargazers
 
-[last-commit-shield]: https://img.shields.io/github/last-commit/westpoint-io/mimik?style=flat-square&label=commit&labelColor=1E1B4B
+[contributors-shield]: https://img.shields.io/github/contributors/MasterPandaa/mimik-plus?style=flat-square&labelColor=1E1B4B
+[contributors-link]: https://github.com/MasterPandaa/mimik-plus/graphs/contributors
 
-[issues-shield]: https://img.shields.io/github/issues/westpoint-io/mimik?style=flat-square&labelColor=1E1B4B
-[issues-link]: https://github.com/westpoint-io/mimik/issues
+[last-commit-shield]: https://img.shields.io/github/last-commit/MasterPandaa/mimik-plus?style=flat-square&label=commit&labelColor=1E1B4B
+
+[issues-shield]: https://img.shields.io/github/issues/MasterPandaa/mimik-plus?style=flat-square&labelColor=1E1B4B
+[issues-link]: https://github.com/MasterPandaa/mimik-plus/issues
 
 [chrome-version-shield]: https://img.shields.io/chrome-web-store/v/jmfohdaflahliammccpiadmkcibohgha?label=Chrome%20Version&style=flat-square&logo=googlechrome&logoColor=C7D2FE&color=4F46E5&labelColor=1E1B4B
 [chrome-link]: https://chromewebstore.google.com/detail/mimik/jmfohdaflahliammccpiadmkcibohgha

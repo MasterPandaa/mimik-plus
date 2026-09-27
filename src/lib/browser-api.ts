@@ -49,12 +49,27 @@ export function queryTabs(query: Browser.tabs.QueryInfo): Promise<Browser.tabs.T
   return browser.tabs.query(query);
 }
 
+/**
+ * Picks the web page the user is working in. When the panel runs in its own
+ * window (browsers without a side panel API), that window is focused and owns
+ * the active tab, so the panel's own page is skipped before choosing.
+ */
 export async function getActiveTab(): Promise<Browser.tabs.Tab | undefined> {
-  const tabs = await browser.tabs.query({
-    active: true,
-    lastFocusedWindow: true,
+  const tabs = await browser.tabs.query({ active: true });
+  const panelUrl = getExtensionURL('/sidepanel.html');
+  const webTabs = tabs.filter((tab) => (tab.url || tab.pendingUrl || '') !== panelUrl);
+  const pool = webTabs.length > 0 ? webTabs : tabs;
+  if (pool.length <= 1) return pool[0];
+
+  const lastFocused = await browser.windows.getLastFocused().catch(() => undefined);
+  const inFocusedWindow = pool.find((tab) => tab.windowId === lastFocused?.id);
+  if (inFocusedWindow) return inFocusedWindow;
+
+  return pool.reduce((best, tab) => {
+    const bestAt = (best as { lastAccessed?: number }).lastAccessed ?? 0;
+    const tabAt = (tab as { lastAccessed?: number }).lastAccessed ?? 0;
+    return tabAt > bestAt ? tab : best;
   });
-  return tabs[0];
 }
 
 export function getTab(tabId: number): Promise<Browser.tabs.Tab> {
@@ -87,8 +102,9 @@ export function focusWindow(windowId: number): Promise<Browser.windows.Window> {
   return browser.windows.update(windowId, { focused: true });
 }
 
-export function captureVisibleTab(format: 'jpeg' | 'png' = 'jpeg', quality = 90): Promise<string> {
-  return browser.tabs.captureVisibleTab({ format, quality });
+export function captureVisibleTab(format: 'jpeg' | 'png' = 'jpeg', quality = 90, windowId?: number): Promise<string> {
+  if (windowId === undefined) return browser.tabs.captureVisibleTab({ format, quality });
+  return browser.tabs.captureVisibleTab(windowId, { format, quality });
 }
 
 export function executeScript(tabId: number, files: ScriptPath[], allFrames = true): Promise<unknown> {
@@ -110,8 +126,26 @@ export const localStorage = {
   set: (items: Partial<Settings>) => browser.storage.local.set(items),
 };
 
+const hasSidePanelApi = () => typeof browser === 'object' && browser !== null && 'sidePanel' in browser;
+
+export async function openDetachedPanel(): Promise<void> {
+  const url = getExtensionURL('/sidepanel.html');
+  try {
+    const existing = await browser.tabs.query({ url });
+    const windowId = existing[0]?.windowId;
+    if (windowId !== undefined) {
+      await browser.windows.update(windowId, { focused: true });
+      return;
+    }
+  } catch {
+    // fall through to creating a fresh window
+  }
+  await browser.windows.create({ url, type: 'popup', width: 400, height: 660 });
+}
+
 export function setSidePanelBehavior(openOnActionClick: boolean): void {
   if (import.meta.env.BROWSER === 'firefox') return;
+  if (!hasSidePanelApi()) return;
   browser.sidePanel.setPanelBehavior({
     openPanelOnActionClick: openOnActionClick,
   });
@@ -126,11 +160,17 @@ export function openSidebar(): void {
       sidebarAction()
         .open()
         ?.catch(() => undefined);
-    } else {
-      browser.sidePanel.open({ windowId: browser.windows.WINDOW_ID_CURRENT })?.catch(() => undefined);
+      return;
     }
+    if (hasSidePanelApi()) {
+      browser.sidePanel
+        .open({ windowId: browser.windows.WINDOW_ID_CURRENT })
+        ?.catch(() => void openDetachedPanel().catch(() => undefined));
+      return;
+    }
+    void openDetachedPanel().catch(() => undefined);
   } catch {
-    return;
+    void openDetachedPanel().catch(() => undefined);
   }
 }
 

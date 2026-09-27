@@ -1,7 +1,6 @@
 import { i18n } from '#imports';
-import { resolveAiKey } from '@/core/capture/ai/keys';
+import { AI_RUNTIME_SETTINGS, resolveAiRuntime } from '@/core/capture/ai/custom-providers';
 import { generateGuideMeta } from '@/core/capture/ai/meta';
-import { AI_PROVIDERS } from '@/core/capture/ai/models';
 import { actionSteps } from '@/core/guides/blocks';
 import {
   clearStepAiPending,
@@ -26,13 +25,13 @@ type GuideMetaInputs =
       model: string;
       apiKey: string;
       baseUrl?: string;
+      headers?: Record<string, string>;
     }
   | { ok: false; reason: ResolveFailure };
 
 async function resolveGuideMetaInputs(guideId: string): Promise<GuideMetaInputs> {
-  const settings = await localStorage.get(['aiApiKeys', 'aiApiKey', 'aiProvider', 'aiModel', 'aiBaseUrl']);
-  const { provider, apiKey } = resolveAiKey(settings);
-  if (!apiKey) return { ok: false, reason: 'no-api-key' };
+  const runtime = resolveAiRuntime(await localStorage.get([...AI_RUNTIME_SETTINGS]));
+  if (!runtime) return { ok: false, reason: 'no-api-key' };
 
   const steps = actionSteps(await getStepsForGuide(guideId));
   const described = steps.filter((s) => s.description).map((s) => ({ description: s.description, url: s.url }));
@@ -41,10 +40,11 @@ async function resolveGuideMetaInputs(guideId: string): Promise<GuideMetaInputs>
   return {
     ok: true,
     steps: described.length > 15 ? [...described.slice(0, 10), ...described.slice(-5)] : described,
-    provider,
-    model: (settings.aiModel as string) || AI_PROVIDERS[provider].defaultModel,
-    apiKey,
-    baseUrl: settings.aiBaseUrl as string | undefined,
+    provider: runtime.selection,
+    model: runtime.model,
+    apiKey: runtime.apiKey,
+    baseUrl: runtime.baseUrl,
+    headers: runtime.headers,
   };
 }
 
@@ -72,7 +72,14 @@ export async function generateGuideMetaOnStop(guideId: string) {
       return;
     }
 
-    const meta = await generateGuideMeta(inputs.steps, inputs.provider, inputs.model, inputs.apiKey, inputs.baseUrl);
+    const meta = await generateGuideMeta(
+      inputs.steps,
+      inputs.provider,
+      inputs.model,
+      inputs.apiKey,
+      inputs.baseUrl,
+      inputs.headers,
+    );
     if (!meta) {
       await applyFallbackTitle(guideId);
       return;
@@ -96,13 +103,43 @@ export async function generateDescriptionOnDemand(guideId: string): Promise<Gene
     const inputs = await resolveGuideMetaInputs(guideId);
     if (!inputs.ok) return { error: inputs.reason };
 
-    const meta = await generateGuideMeta(inputs.steps, inputs.provider, inputs.model, inputs.apiKey, inputs.baseUrl);
+    const meta = await generateGuideMeta(
+      inputs.steps,
+      inputs.provider,
+      inputs.model,
+      inputs.apiKey,
+      inputs.baseUrl,
+      inputs.headers,
+    );
     if (!meta?.description) return { error: 'generation-failed' };
 
     await updateGuideDescription(guideId, meta.description);
     return { description: meta.description };
   } catch (err) {
     logger.error('On-demand description generation failed', err);
+    return { error: 'save-failed' };
+  }
+}
+
+export async function generateTitleOnDemand(guideId: string): Promise<GenerateGuideDescriptionResponse> {
+  try {
+    const inputs = await resolveGuideMetaInputs(guideId);
+    if (!inputs.ok) return { error: inputs.reason };
+
+    const meta = await generateGuideMeta(
+      inputs.steps,
+      inputs.provider,
+      inputs.model,
+      inputs.apiKey,
+      inputs.baseUrl,
+      inputs.headers,
+    );
+    if (!meta?.title) return { error: 'generation-failed' };
+
+    await updateGuideTitle(guideId, meta.title);
+    return { title: meta.title };
+  } catch (err) {
+    logger.error('On-demand title generation failed', err);
     return { error: 'save-failed' };
   }
 }

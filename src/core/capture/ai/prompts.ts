@@ -63,6 +63,7 @@ export type RewritePreset = keyof typeof REWRITE_PRESETS;
 
 export const AI_LANGUAGES = [
   { code: 'en', label: 'English' },
+  { code: 'id', label: 'Bahasa Indonesia' },
   { code: 'zh-CN', label: '中文' },
   { code: 'es', label: 'Español' },
   { code: 'pt-BR', label: 'Português (Brasil)' },
@@ -77,6 +78,7 @@ const LANGUAGE_NAMES: Record<string, string> = {
   fr: 'French',
   pt: 'Brazilian Portuguese',
   de: 'German',
+  id: 'Indonesian',
   ja: 'Japanese',
   ko: 'Korean',
   zh: 'Chinese',

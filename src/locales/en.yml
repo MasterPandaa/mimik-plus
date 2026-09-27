@@ -143,6 +143,35 @@ settings:
   starCtaTitle: "Like what you see?"
   starCtaMessage: A GitHub star helps others find Mimik and keeps us motivated!
   starOnGithub: Star on GitHub
+  customProviders: Custom providers
+  customProvidersHint: "Connect any OpenAI-compatible API, opencode-style: your own base URL, models, and headers."
+  noCustomProviders: "No custom providers yet."
+  addProvider: Add provider
+  addCustomProvider: "Add custom provider…"
+  editProvider: Edit provider
+  useProvider: Use
+  inUse: In use
+  providerId: Provider ID
+  providerIdHint: "Lowercase letters, numbers, hyphens, or underscores."
+  providerModelCount: "$1 models"
+  displayName: Display name
+  apiKeyOptionalHint: "Optional. Leave empty if you manage auth via headers."
+  models: Models
+  modelId: Model ID
+  modelName: Display name
+  addModel: Add model
+  headers: Headers
+  headerName: Header name
+  headerValue: Value
+  addHeader: Add header
+  deleteProviderConfirm: 'Delete provider "$1"?'
+  providerIdRequired: "Provider ID is required."
+  providerIdInvalid: "Use only lowercase letters, numbers, hyphens, or underscores."
+  providerIdTaken: "This provider ID is already in use."
+  providerBaseUrlRequired: "Base URL is required."
+  providerBaseUrlInvalid: "Enter a valid http(s) URL."
+  providerModelsRequired: "Add at least one model."
+  providerBaseUrlManaged: "The base URL is managed in Custom providers below."
 
 blurPresets:
   email: Email
@@ -229,6 +258,12 @@ editor:
   rewriteErrorNoApiKey: Add an AI API key in settings to rewrite text.
   rewriteErrorFailed: Could not rewrite the selection. Try again.
   rewriteErrorStale: The text changed. Select it again.
+  fillWithAi: Fill with AI
+  fillAllWithAi: Fill all with AI
+  regenerateTitle: Regenerate title
+  fillStepsDone: "$1 descriptions generated"
+  fillStepsNone: No steps need an AI description.
+  fillStepsError: Could not generate descriptions. Try again.
 
 capture:
   recordSteps: Record steps
