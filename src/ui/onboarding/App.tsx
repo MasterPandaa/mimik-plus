@@ -2,11 +2,14 @@ import { Globe, Mic, MousePointerClick, Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { browser, i18n } from '#imports';
 import { PRESET_LABELS, type PresetKey } from '@/core/blur/regexes';
-import { type CustomProviderMap, parseCustomProviders } from '@/core/capture/ai/custom-providers';
+import {
+  type CustomProviderMap,
+  parseCustomProviders,
+  resolveProviderConfig,
+} from '@/core/capture/ai/custom-providers';
 import { type AIApiKeys, keyFor, migrateApiKeys, withKeyFor } from '@/core/capture/ai/keys';
 import {
   AI_PROVIDERS,
-  type AIProviderKey,
   type AIProviderSelection,
   CUSTOM_MODEL_VALUE,
   customProviderIdOf,
@@ -183,9 +186,9 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
   const activeCustomId = isCustomProviderSelection(provider) ? customProviderIdOf(provider) : null;
   const activeCustom = activeCustomId ? customProviders[activeCustomId] : undefined;
   const showCustom = customSectionOpen || !!activeCustom;
-  const providerConfig =
-    AI_PROVIDERS[(isCustomProviderSelection(provider) ? DEFAULT_AI_PROVIDER : provider) as AIProviderKey] ??
-    AI_PROVIDERS[DEFAULT_AI_PROVIDER];
+  const effectiveBaseUrl = activeCustom ? activeCustom.baseUrl : baseUrl;
+  const effectiveKey = activeCustom ? activeCustom.apiKey : apiKey;
+  const providerConfig = resolveProviderConfig(provider, customProviders) ?? AI_PROVIDERS[DEFAULT_AI_PROVIDER];
   const usingCustomModel = customModel || isCustomModel(model, providerConfig);
 
   const handleProviderChange = (newProvider: string) => {
@@ -360,9 +363,13 @@ function AISetupStep({ onNext, onSkip, onBack, index, total }: StepProps) {
                   <div className="flex items-center gap-3 mt-2">
                     <button
                       type="button"
-                      disabled={!apiKey || aiKeyCheck.status === 'checking'}
+                      disabled={
+                        (activeCustom ? !effectiveBaseUrl.trim() || !model.trim() : !apiKey) ||
+                        aiKeyCheck.status === 'checking'
+                      }
                       onClick={() => {
-                        if (aiKeyCheck.status !== 'checking') void aiKeyCheck.check(provider, apiKey, baseUrl, model);
+                        if (aiKeyCheck.status !== 'checking')
+                          void aiKeyCheck.check(provider, effectiveKey, effectiveBaseUrl, model);
                       }}
                       className="px-4 py-2 bg-card text-foreground border border-border rounded-lg font-semibold text-xs hover:border-accent hover:text-accent transition-colors disabled:opacity-50 disabled:pointer-events-none"
                     >

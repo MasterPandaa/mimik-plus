@@ -137,7 +137,10 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
         setModel((result.aiModel as string) || config.defaultModel);
         const keys = migrateApiKeys(result);
         setApiKeys(keys);
-        setApiKey(keyFor(keys, p));
+        const effectiveLoadedKey = isCustomProviderSelection(p)
+          ? customs[customProviderIdOf(p)]?.apiKey || keyFor(keys, p)
+          : keyFor(keys, p);
+        setApiKey(effectiveLoadedKey);
         if (
           !isCustomProviderSelection(p) &&
           isProviderKey(p) &&
@@ -229,11 +232,9 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
   const effectiveKey = activeCustom ? activeCustom.apiKey : apiKey;
   const effectiveBaseUrl = activeCustom ? activeCustom.baseUrl : baseUrl;
   const canCheckKey = activeCustom
-    ? effectiveKey.trim().length > 0 || Object.keys(customHeaders).length > 0
+    ? effectiveBaseUrl.trim().length > 0 && model.trim().length > 0
     : effectiveKey.trim().length > 0;
-  const keyMissing = activeCustom
-    ? effectiveKey.trim().length === 0 && Object.keys(customHeaders).length === 0
-    : effectiveKey.trim().length === 0;
+  const keyMissing = activeCustom ? false : effectiveKey.trim().length === 0;
   const usingCustomModel = customModel || isCustomModel(model, providerConfig);
   const voiceKey = resolveVoiceApiKey({ voiceProvider, voiceApiKey, aiProvider: provider, aiApiKey: apiKey });
 
@@ -252,6 +253,7 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
     if (isCustomProviderSelection(newProvider)) {
       const custom = customsMap[customProviderIdOf(newProvider)];
       setModel(custom?.models[0]?.id ?? '');
+      setApiKey(custom?.apiKey ?? '');
       return;
     }
     const builtin = isProviderKey(newProvider) ? newProvider : DEFAULT_AI_PROVIDER;
@@ -291,10 +293,9 @@ export default function SettingsView({ onBack }: SettingsViewProps) {
       setCustomProviders((prev) =>
         prev[customId] ? { ...prev, [customId]: { ...prev[customId], apiKey: next } } : prev,
       );
-    } else {
-      setApiKey(next);
-      setApiKeys((prev) => withKeyFor(prev, provider, next));
     }
+    setApiKey(next);
+    setApiKeys((prev) => withKeyFor(prev, provider, next));
     aiKeyCheck.reset();
   };
 

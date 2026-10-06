@@ -139,6 +139,7 @@ describe('stored provider keys', () => {
   it('accepts the ones that do', () => {
     expect(isProviderKey('openai')).toBe(true);
     expect(findProvider('deepseek')).toBe(AI_PROVIDERS.deepseek);
+    expect(findProvider('gemini')).toBe(AI_PROVIDERS.gemini);
   });
 });
 

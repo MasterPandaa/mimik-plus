@@ -19,9 +19,10 @@ export function createModel(
   };
   const baseURL = resolveBaseUrl(config, baseUrl);
   const extraHeaders = headers && Object.keys(headers).length > 0 ? headers : undefined;
-  if (config.protocol === 'anthropic') return createAnthropic({ apiKey, baseURL })(model);
+  const effectiveKey = apiKey || 'custom-key';
+  if (config.protocol === 'anthropic') return createAnthropic({ apiKey: effectiveKey, baseURL })(model);
   const openai = createOpenAI({
-    apiKey,
+    apiKey: effectiveKey,
     baseURL,
     ...(extraHeaders ? { headers: extraHeaders } : {}),
     name: provider,

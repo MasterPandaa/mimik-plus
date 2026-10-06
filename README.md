@@ -178,7 +178,7 @@ Need to blur something custom? The manual blur picker lets you select any DOM el
 
 ### 🧠 AI descriptions (optional)
 
-Bring your own API key (OpenAI or Anthropic) and Mimik generates human-readable step descriptions like *"Click the **Submit** button to save changes"* instead of the rule-based `Click Submit`.
+Bring your own API key (OpenAI, Anthropic, or Google Gemini) and Mimik generates human-readable step descriptions like *"Click the **Submit** button to save changes"* instead of the rule-based `Click Submit`.
 
 Descriptions are generated from a lightweight DOM context (~50-100 tokens), not screenshots. Roughly 15-30x cheaper than vision models. Choose the language you want descriptions in (English, Spanish, Portuguese, French, German, Chinese, Indonesian).
 
@@ -192,7 +192,7 @@ Descriptions are generated from a lightweight DOM context (~50-100 tokens), not 
 
 ### 🔌 Custom AI Providers (new!)
 
-Beyond OpenAI and Anthropic, you can now connect **any OpenAI-compatible API** as a custom AI provider. This includes self-hosted models via Ollama, LM Studio, vLLM, or any other OpenAI-compatible endpoint — as well as third-party providers like Together AI, Groq, or your own company's API gateway.
+Beyond OpenAI, Anthropic, and Google Gemini, you can now connect **any OpenAI-compatible API** as a custom AI provider. This includes self-hosted models via Ollama, LM Studio, vLLM, or any other OpenAI-compatible endpoint — as well as third-party providers like Together AI, Groq, or your own company's API gateway.
 
 **How to use:**
 1. Open **Settings** in the Mimik side panel

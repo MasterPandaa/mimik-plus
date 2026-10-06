@@ -177,7 +177,7 @@ Perlu memblur sesuatu yang kustom? Pemilih blur manual memungkinkanmu memilih el
 
 ### 🧠 Deskripsi AI (opsional)
 
-Gunakan kunci API milikmu sendiri (OpenAI atau Anthropic) dan Mimik akan menghasilkan deskripsi langkah yang mudah dibaca seperti *"Klik tombol **Kirim** untuk menyimpan perubahan"* alih-alih `Klik Submit` yang berbasis aturan.
+Gunakan kunci API milikmu sendiri (OpenAI, Anthropic, atau Google Gemini) dan Mimik akan menghasilkan deskripsi langkah yang mudah dibaca seperti *"Klik tombol **Kirim** untuk menyimpan perubahan"* alih-alih `Klik Submit` yang berbasis aturan.
 
 Deskripsi dibuat dari konteks DOM yang ringan (~50-100 token), bukan tangkapan layar. Sekitar 15-30x lebih hemat dibanding model vision. Pilih bahasa deskripsi (Inggris, Spanyol, Portugis, Prancis, Jerman, Mandarin, **Indonesia**).
 
@@ -191,7 +191,7 @@ Deskripsi dibuat dari konteks DOM yang ringan (~50-100 token), bukan tangkapan l
 
 ### 🔌 Penyedia AI Kustom (baru!)
 
-Selain OpenAI dan Anthropic, kini kamu bisa menghubungkan **API apa pun yang kompatibel dengan OpenAI** sebagai penyedia AI kustom. Ini termasuk model yang di-*host* sendiri seperti Ollama, LM Studio, vLLM, atau penyedia pihak ketiga seperti Together AI, Groq, atau gateway API perusahaanmu.
+Selain OpenAI, Anthropic, dan Google Gemini, kini kamu bisa menghubungkan **API apa pun yang kompatibel dengan OpenAI** sebagai penyedia AI kustom. Ini termasuk model yang di-*host* sendiri seperti Ollama, LM Studio, vLLM, atau penyedia pihak ketiga seperti Together AI, Groq, atau gateway API perusahaanmu.
 
 **Cara menggunakannya:**
 1. Buka **Pengaturan** di panel samping Mimik

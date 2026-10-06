@@ -1,0 +1,79 @@
+name: Submit to Stores
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to submit (e.g., v1.0.0)"
+        required: true
+        type: string
+      dryRun:
+        description: Dry run (build + zip but skip submission)
+        required: false
+        default: false
+        type: boolean
+      targets:
+        description: Which stores to submit to
+        required: true
+        default: chrome-firefox
+        type: choice
+        options:
+          - chrome-firefox
+          - chrome
+          - firefox
+
+jobs:
+  submit:
+    name: Submit to Stores
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag }}
+
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build and zip
+        run: pnpm zip:all
+
+      - name: Upload zips to GitHub release
+        run: |
+          gh release upload "${{ inputs.tag }}" \
+            .output/*-chrome.zip \
+            .output/*-firefox.zip \
+            .output/*-sources.zip \
+            --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Submit to Chrome Web Store
+        if: inputs.targets != 'firefox' && !inputs.dryRun
+        run: |
+          pnpm wxt submit --chrome-zip .output/*-chrome.zip
+        env:
+          CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+      - name: Submit to Firefox AMO
+        if: inputs.targets != 'chrome' && !inputs.dryRun
+        run: |
+          pnpm wxt submit \
+            --firefox-zip .output/*-firefox.zip \
+            --firefox-sources-zip .output/*-sources.zip
+        env:
+          FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}

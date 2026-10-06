@@ -125,7 +125,21 @@ async function probeWithInference(
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
-    return res.ok;
+    if (res.ok) return true;
+    if (res.status === 400 && protocol === 'openai') {
+      try {
+        const retryRes = await fetch(url, {
+          method: 'POST',
+          headers: { ...headers, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, messages: [{ role: 'user', content: 'Reply with OK.' }], stream: false }),
+          signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        });
+        return retryRes.ok;
+      } catch {
+        return false;
+      }
+    }
+    return false;
   } catch {
     return false;
   }
@@ -154,7 +168,10 @@ async function validateCustomServer(
   }
 
   const models = await fetchModelsFromUrl(catalogUrl, headers);
-  if (models && !models.includes(selectedModel)) return { valid: false, reason: 'model-invalid', models };
+  if (models) {
+    if (models.includes(selectedModel)) return { valid: true, models };
+    return { valid: false, reason: 'model-invalid', models };
+  }
   return { valid: false, reason: 'rejected' };
 }
 
@@ -193,7 +210,8 @@ export async function validateApiKey(
     return checkCatalog(endpoint.url, endpoint.headers(apiKey));
   }
 
-  if (isCustomBaseUrl(config, baseUrl)) return validateCustomServer(config, apiKey, baseUrl as string, model);
+  if (isCustomBaseUrl(config, baseUrl))
+    return validateCustomServer(config, apiKey, baseUrl as string, model, extraHeaders);
 
   const headers = PROTOCOL_HEADERS[config.protocol](apiKey);
   const base = resolveBaseUrl(config);

@@ -77,11 +77,7 @@ export function CustomProviderEditor({ providers, currentId, onSave, onCancel }:
   for (const header of draft.headers) {
     if (header.name.trim() && header.value.trim()) draftHeaders[header.name.trim()] = header.value.trim();
   }
-  const canCheck =
-    !!draft.id.trim() &&
-    !!draft.baseUrl.trim() &&
-    !!firstModel &&
-    (!!draft.apiKey.trim() || Object.keys(draftHeaders).length > 0);
+  const canCheck = !!draft.id.trim() && !!draft.baseUrl.trim() && !!firstModel;
 
   const handleSave = () => {
     const models = draft.models

@@ -35,6 +35,19 @@ export const AI_PROVIDERS = {
       { id: CUSTOM_MODEL_VALUE, label: 'Custom' },
     ],
   },
+  gemini: {
+    label: 'Gemini',
+    protocol: 'openai',
+    transport: 'chat',
+    defaultBaseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
+    defaultModel: 'gemini-3.8-flash',
+    models: [
+      { id: 'gemini-3.8-flash', label: 'Gemini 3.8 Flash' },
+      { id: 'gemini-3.7-flash', label: 'Gemini 3.7 Flash' },
+      { id: 'gemini-3.6-flash', label: 'Gemini 3.6 Flash' },
+      { id: CUSTOM_MODEL_VALUE, label: 'Custom' },
+    ],
+  },
   anthropic: {
     label: 'Anthropic',
     protocol: 'anthropic',

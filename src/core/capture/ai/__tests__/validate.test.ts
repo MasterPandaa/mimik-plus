@@ -82,6 +82,19 @@ describe('validateApiKey', () => {
     expect((init!.headers as Record<string, string>).Authorization).toBe('Bearer sk-deepseek');
   });
 
+  it('returns valid for gemini', async () => {
+    fetchMock.mockResolvedValueOnce(modelsBody('gemini-3.8-flash'));
+    expect(await validateApiKey('gemini', 'AIzaSy-key')).toEqual({ valid: true, models: ['gemini-3.8-flash'] });
+  });
+
+  it('checks a gemini key against google openai endpoint', async () => {
+    fetchMock.mockResolvedValueOnce(modelsBody('gemini-3.8-flash'));
+    expect(await validateApiKey('gemini', 'AIzaSy-key')).toEqual({ valid: true, models: ['gemini-3.8-flash'] });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('https://generativelanguage.googleapis.com/v1beta/openai/models');
+    expect((init!.headers as Record<string, string>).Authorization).toBe('Bearer AIzaSy-key');
+  });
+
   it('gives up rather than spinning forever when a host never answers', async () => {
     fetchMock.mockResolvedValueOnce(jsonResponse(null));
     await validateApiKey('openai', 'sk-key');
@@ -411,6 +424,30 @@ describe('validateApiKey', () => {
         reason: 'network',
       });
       expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('returns valid when inference probe fails on 500 but models catalog has selected model', async () => {
+      fetchMock.mockResolvedValueOnce(errorResponse(500));
+      fetchMock.mockResolvedValueOnce(modelsBody('my-model', 'other-model'));
+      expect(await validateApiKey('custom:my-provider', 'sk-custom', 'https://api.example.com/v1', 'my-model')).toEqual(
+        {
+          valid: true,
+          models: ['my-model', 'other-model'],
+        },
+      );
+    });
+
+    it('retries inference probe without max_tokens if initial probe returns 400', async () => {
+      fetchMock.mockResolvedValueOnce(errorResponse(400));
+      fetchMock.mockResolvedValueOnce(chatOkBody());
+      fetchMock.mockResolvedValueOnce(modelsBody('reasoning-model'));
+      expect(
+        await validateApiKey('custom:my-provider', 'sk-custom', 'https://api.example.com/v1', 'reasoning-model'),
+      ).toEqual({
+        valid: true,
+        models: ['reasoning-model'],
+      });
+      expect(fetchMock).toHaveBeenCalledTimes(3);
     });
   });
 });
